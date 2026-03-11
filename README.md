@@ -1,4 +1,4 @@
-# 10th_SpringBoot
+# 10th_SpringBoot_A
 
 ### Git 작업 순서
 
