@@ -11,15 +11,9 @@
         <module name="umc10th.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="umc10th" target="21" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="21" />
   </component>
   <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="umc10th" options="-parameters" />
-      <module name="umc10th.main" options="-parameters" />
-      <module name="umc10th.test" options="-parameters" />
-    </option>
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-parameters" />
   </component>
 </project>
