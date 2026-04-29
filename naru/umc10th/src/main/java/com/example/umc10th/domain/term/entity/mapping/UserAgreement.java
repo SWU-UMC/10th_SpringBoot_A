@@ -1,5 +1,7 @@
-package com.example.umc10th.domain.user.entity;
+package com.example.umc10th.domain.term.entity.mapping;
 
+import com.example.umc10th.domain.term.entity.Term;
+import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,8 +11,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name = "owner")
-public class Owner extends BaseEntity {
+@Table(name = "user_agreement")
+public class UserAgreement extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,8 +21,9 @@ public class Owner extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(length = 20)
-    private String businessNumber;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "term_id")
+    private Term term;
 
-    private Boolean isVerified;
+    private Boolean isAgreed;
 }

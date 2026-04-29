@@ -1,4 +1,4 @@
-package com.example.umc10th.domain.user.entity;
+package com.example.umc10th.domain.inquire.entity;
 
 import com.example.umc10th.global.common.BaseEntity;
 import jakarta.persistence.*;
@@ -9,18 +9,18 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name = "owner")
-public class Owner extends BaseEntity {
+@Table(name = "inquire_image")
+public class InquireImage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "inquire_id", nullable = false)
+    private Inquire inquire;
 
-    @Column(length = 20)
-    private String businessNumber;
+    @Column(nullable = false, length = 255)
+    private String imageKey;
 
-    private Boolean isVerified;
+    private Integer sequence;
 }
