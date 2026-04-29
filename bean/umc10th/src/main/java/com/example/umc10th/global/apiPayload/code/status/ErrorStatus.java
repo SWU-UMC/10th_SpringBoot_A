@@ -1,4 +1,4 @@
-package com.example.umc10th.domain.mission.exception.code;
+package com.example.umc10th.global.apiPayload.code.status;
 
 import com.example.umc10th.global.apiPayload.code.BaseErrorCode;
 import com.example.umc10th.global.apiPayload.code.dto.ReasonDto;
@@ -8,9 +8,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum MissionErrorCode implements BaseErrorCode {
-    MISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "MISSION404", "미션을 찾을 수 없습니다."),
-    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE404", "가게를 찾을 수 없습니다.");
+public enum ErrorStatus implements BaseErrorCode {
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "Server error."),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON400", "Bad request."),
+    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "COMMON4001", "Validation failed.");
 
     private final HttpStatus httpStatus;
     private final String code;

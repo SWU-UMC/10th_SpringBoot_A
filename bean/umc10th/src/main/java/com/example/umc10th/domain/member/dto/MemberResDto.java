@@ -14,4 +14,13 @@ public class MemberResDto {
             String nickname
     ) {
     }
+
+    public record GetMyPageResponse(
+            String name,
+            String profileUrl,
+            String email,
+            String phoneNumber,
+            Integer point
+    ) {
+    }
 }

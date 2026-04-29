@@ -1,15 +1,10 @@
 package com.example.umc10th.domain.review.exception;
 
 import com.example.umc10th.domain.review.exception.code.ReviewErrorCode;
-import lombok.Getter;
+import com.example.umc10th.global.apiPayload.exception.GeneralException;
 
-@Getter
-public class ReviewException extends RuntimeException {
-
-    private final ReviewErrorCode errorCode;
-
+public class ReviewException extends GeneralException {
     public ReviewException(ReviewErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode;
+        super(errorCode);
     }
 }
