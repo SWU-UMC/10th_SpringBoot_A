@@ -6,8 +6,11 @@ import com.example.umc10th.domain.user.dto.UserResponseDto;
 public interface UserService {
 
     // Query Parameter
-    public String singleParameter(String singleParameter);
+    String singleParameter(String singleParameter);
 
     // Request Body
-    public UserResponseDto.RequestBody requestBody(UserRequestDto.RequestBody dto);
+    UserResponseDto.RequestBody requestBody(UserRequestDto.RequestBody dto);
+
+    // 마이페이지 조회
+    UserResponseDto.MyPageResultDto getMyPage(UserRequestDto.GetMyPageDto request);
 }

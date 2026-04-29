@@ -8,6 +8,7 @@ import com.example.umc10th.domain.user.service.UserService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,15 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+
+    // 마이페이지 조회
+    @PostMapping("/mypage")
+    public ApiResponse<UserResponseDto.MyPageResultDto> getMyPage(
+            @RequestBody @Valid UserRequestDto.GetMyPageDto request
+    ) {
+        UserResponseDto.MyPageResultDto result = userService.getMyPage(request);
+        return ApiResponse.onSuccess(GeneralSuccessCode.OK, result);
+    }
 
     // 아무것도 받지 않은 경우
     @GetMapping("/test")

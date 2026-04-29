@@ -9,4 +9,14 @@ public class UserResponseDto {
             String stringTest,
             Long longTest
     ) {}
+
+    @Builder
+    public record MyPageResultDto(
+            String name,
+            String email,
+            String phoneNumber,
+            String profileImageKey,
+            Boolean isVerified,
+            Integer totalPoint
+    ) {}
 }

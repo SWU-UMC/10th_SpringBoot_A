@@ -1,5 +1,6 @@
 package com.example.umc10th.domain.user.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 public class UserRequestDto {
@@ -16,4 +17,9 @@ public class UserRequestDto {
         private String stringTest;
         private Long longTest;
     }
+
+    public record GetMyPageDto(
+            @NotNull(message = "사용자 ID는 필수입니다.")
+            Long userId
+    ) {}
 }
