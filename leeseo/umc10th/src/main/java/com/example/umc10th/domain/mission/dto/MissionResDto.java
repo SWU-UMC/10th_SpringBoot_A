@@ -1,6 +1,6 @@
 package com.example.umc10th.domain.mission.dto;
 
-import com.example.umc10th.domain.mission.enums.StoreType;
+import com.example.umc10th.domain.member.enums.FoodType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,7 +18,7 @@ public class MissionResDto {
 
     public record StoreInfo(
         String storeName,
-        StoreType storeType,
+        FoodType storeType,
         LocalDate deadline,
         Integer minCost,
         Integer point

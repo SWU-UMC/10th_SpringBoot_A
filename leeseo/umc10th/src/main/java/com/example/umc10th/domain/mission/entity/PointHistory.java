@@ -14,22 +14,19 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "mission")
-public class Mission {
+@Table(name = "point_history")
+public class PointHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "min_cost", nullable = false)
-    private Integer minCost;
-
-    @Column(name = "point_ratio", nullable = false)
-    private Long pointRatio;
-
-    @Column(name = "deadline", nullable = false)
-    private LocalDate deadline;
-
     @Column(name = "rewards_point", nullable = false)
     private Integer rewardsPoint;
+
+    @Column(name = "accumulation_date", nullable = false)
+    private LocalDate accumulationDate;
+
+    @Column(name = "total_point", nullable = false)
+    private Integer totalPoint;
 }

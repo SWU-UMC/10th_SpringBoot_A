@@ -3,7 +3,7 @@ package com.example.umc10th.domain.mission.controller;
 import com.example.umc10th.domain.mission.dto.MissionResDto;
 import com.example.umc10th.domain.mission.enums.Address;
 import com.example.umc10th.domain.mission.enums.Status;
-import com.example.umc10th.domain.mission.enums.StoreType;
+import com.example.umc10th.domain.member.enums.FoodType;
 import com.example.umc10th.domain.mission.exception.code.MissionSuccessCode;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +32,7 @@ public class MissionController implements MissionControllerDocs{
             @RequestParam Address location
     ) {
         // 서비스 로직
-        MissionResDto.StoreInfo store = new MissionResDto.StoreInfo("반이학생 마라탕", StoreType.CHINESE, LocalDate.now(), 10000, 500);
+        MissionResDto.StoreInfo store = new MissionResDto.StoreInfo("반이학생 마라탕", FoodType.CHINESE, LocalDate.now(), 10000, 500);
         MissionResDto.StoreList response = new MissionResDto.StoreList(List.of(store));
         return ApiResponse.onSuccess(MissionSuccessCode.MISSION_LIST_GET_OK, response);
     }
@@ -50,7 +50,7 @@ public class MissionController implements MissionControllerDocs{
             @RequestParam Status status
     ) {
         // 서비스 로직
-        MissionResDto.StoreInfo store = new MissionResDto.StoreInfo("반이학생 마라탕", StoreType.CHINESE, LocalDate.now(), 10000, 500);
+        MissionResDto.StoreInfo store = new MissionResDto.StoreInfo("반이학생 마라탕", FoodType.CHINESE, LocalDate.now(), 10000, 500);
         MissionResDto.StoreList response = new MissionResDto.StoreList(List.of(store));
         return ApiResponse.onSuccess(MissionSuccessCode.MY_MISSION_LIST_GET_OK, response);
     }
