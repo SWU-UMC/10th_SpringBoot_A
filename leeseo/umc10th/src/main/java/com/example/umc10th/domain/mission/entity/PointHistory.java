@@ -1,6 +1,7 @@
 package com.example.umc10th.domain.mission.entity;
 
-import com.example.umc10th.domain.member.enums.FoodType;
+import com.example.umc10th.domain.member.entity.Member;
+import com.example.umc10th.domain.mission.entity.mapping.MemberMission;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,4 +30,12 @@ public class PointHistory {
 
     @Column(name = "total_point", nullable = false)
     private Integer totalPoint;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_mission_id")
+    private MemberMission memberMission;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 }
