@@ -1,7 +1,9 @@
 package com.example.umc10th.domain.member.entity;
 
+import com.example.umc10th.domain.member.converter.MemberConverter;
 import com.example.umc10th.domain.member.entity.mapping.MemberFood;
 import com.example.umc10th.domain.member.entity.mapping.MemberTerm;
+import com.example.umc10th.domain.member.enums.FoodType;
 import com.example.umc10th.domain.member.enums.Gender;
 import com.example.umc10th.domain.member.enums.SocialType;
 import com.example.umc10th.domain.member.enums.Status;
@@ -31,7 +33,7 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nickanme", unique = true)
+    @Column(name = "nickname", unique = true)
     private String nickname;
 
     @Builder.Default
@@ -89,5 +91,34 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member")
     private List<Review> reviewList = new ArrayList<>();
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void updateBirth(LocalDate birth) {
+        this.birth = birth;
+    }
+
+    public void updateAddress(Address address) {
+        this.address = address;
+    }
+
+    public void updateFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
+    }
+
+    public void updateFoodList(List<Food> foodList) {
+        List<MemberFood> list = new ArrayList<>();
+        for (Food food : foodList) {
+            list.add(MemberConverter.toMemberFood(food, this));
+        }
+        this.memberFoodList.clear();
+        this.memberFoodList.addAll(list);
+    }
 
 }
