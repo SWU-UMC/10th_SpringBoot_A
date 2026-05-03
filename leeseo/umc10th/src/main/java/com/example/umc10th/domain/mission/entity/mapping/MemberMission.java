@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -42,5 +43,17 @@ public class MemberMission extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
     private Mission mission;
+
+    public void updateStatus(Status status) {
+        this.status = status;
+    }
+
+    public void updateSuccessDate(LocalDate successDate) {
+        this.successDate = successDate;
+    }
+
+    public void updateSuccessNumber (Member member) {
+        this.successNumber = UUID.randomUUID() + member.getSocialId();
+    }
 
 }

@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@RestController("/api/v1")
+@RestController
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Tag(name = "Review", description = "리뷰 관련 API")
 public class ReviewController implements ReviewControllerDocs{

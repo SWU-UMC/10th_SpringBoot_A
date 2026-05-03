@@ -30,7 +30,7 @@ public class Store {
 
     @Column(name = "store_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private FoodType StoreType;
+    private FoodType storeType;
 
     @Column(name = "address", nullable = false)
     @Enumerated(EnumType.STRING)

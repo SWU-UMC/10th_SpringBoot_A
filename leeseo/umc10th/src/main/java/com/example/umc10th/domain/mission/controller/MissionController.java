@@ -1,74 +1,77 @@
 package com.example.umc10th.domain.mission.controller;
 
-import com.example.umc10th.domain.mission.dto.MissionResDto;
+import com.example.umc10th.domain.mission.dto.Achievement;
+import com.example.umc10th.domain.mission.dto.MemberMissionInfo;
+import com.example.umc10th.domain.mission.dto.MissionInfo;
+import com.example.umc10th.domain.mission.dto.OwnerNumber;
 import com.example.umc10th.domain.mission.enums.Address;
 import com.example.umc10th.domain.mission.enums.Status;
-import com.example.umc10th.domain.member.enums.FoodType;
 import com.example.umc10th.domain.mission.exception.code.MissionSuccessCode;
+import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @RequiredArgsConstructor
-@RestController("/api/vi")
+@RestController
+@RequestMapping("/api/v1")
 @Tag(name = "Mission", description = "미션 관련 API")
 public class MissionController implements MissionControllerDocs{
 
+    private final MissionService missionService;
+
     @GetMapping("/missions/achievement-rate")
-    public ApiResponse<MissionResDto.Achievement> getMissionAchievement(
-            @RequestParam Address location
+    public ApiResponse<Achievement> getMissionAchievement(
+            @RequestParam Address location,
+            @RequestParam Long memberId
     ) {
-        // 서비스 로직
-        MissionResDto.Achievement response = new MissionResDto.Achievement(10,7);
+        Achievement response = missionService.getMissionAchievement(location, memberId);
         return ApiResponse.onSuccess(MissionSuccessCode.ACHIEVEMENT_GET_OK, response);
     }
 
     @GetMapping("/missions")
-    public ApiResponse<MissionResDto.StoreList> getMissionList(
-            @RequestParam Address location
+    public ApiResponse<Slice<MissionInfo>> getMissionList(
+            @RequestParam Address location,
+            @RequestParam Long cursor
     ) {
-        // 서비스 로직
-        MissionResDto.StoreInfo store = new MissionResDto.StoreInfo("반이학생 마라탕", FoodType.CHINESE, LocalDate.now(), 10000, 500);
-        MissionResDto.StoreList response = new MissionResDto.StoreList(List.of(store));
+        Slice<MissionInfo> response = missionService.getMissionList(location, cursor);
         return ApiResponse.onSuccess(MissionSuccessCode.MISSION_LIST_GET_OK, response);
     }
 
     @PostMapping("/members/me/missions/{missionId}")
     public ApiResponse<Void> saveMemberMission(
-            @PathVariable Long missionId
+            @PathVariable Long missionId,
+            @RequestParam Long memberId
     ) {
-        // 서비스 로직
+        missionService.saveMemberMission(missionId,memberId);
         return ApiResponse.onSuccess(MissionSuccessCode.MEMBER_MISSION_POST_OK,null);
     }
 
     @GetMapping("/members/me/missions")
-    public ApiResponse<MissionResDto.StoreList> getMyMissions(
-            @RequestParam Status status
+    public ApiResponse<Slice<MemberMissionInfo>> getMyMissions(
+            @RequestParam Status status,
+            @RequestParam Long memberId,
+            @RequestParam Long cursor
     ) {
-        // 서비스 로직
-        MissionResDto.StoreInfo store = new MissionResDto.StoreInfo("반이학생 마라탕", FoodType.CHINESE, LocalDate.now(), 10000, 500);
-        MissionResDto.StoreList response = new MissionResDto.StoreList(List.of(store));
+        Slice<MemberMissionInfo> response = missionService.getMyMissionList(status, memberId, cursor);
         return ApiResponse.onSuccess(MissionSuccessCode.MY_MISSION_LIST_GET_OK, response);
     }
 
-    @PostMapping("/missions/{missionId}/success")
+    @PostMapping("/missions/{memberMissionId}/success")
     public ApiResponse<Void> postSuccessRequest(
-            @PathVariable Long missionId
+            @PathVariable Long memberMissionId
     ) {
-        // 서비스 로직
+        missionService.postSuccessRequest(memberMissionId);
         return ApiResponse.onSuccess(MissionSuccessCode.MISSION_SUCCESS_REQUEST_OK, null);
     }
 
-    @GetMapping("/missions/{missionId}/success")
-    public ApiResponse<MissionResDto.OwnerNumber> getOwnerNumber(
-            @PathVariable Long missionId
+    @GetMapping("/missions/{memberMissionId}/success")
+    public ApiResponse<OwnerNumber> getOwnerNumber(
+            @PathVariable Long memberMissionId
     ) {
-        // 서비스 로직
-        MissionResDto.OwnerNumber response = new MissionResDto.OwnerNumber(1234232);
+        OwnerNumber response = missionService.getOwnerNumber(memberMissionId);
         return ApiResponse.onSuccess(MissionSuccessCode.OWNER_NUMBER_GET_OK, response);
     }
 
