@@ -1,26 +1,19 @@
 package com.example.umc10th.domain.mission.dto;
 
+import com.example.umc10th.domain.mission.entity.enums.MissionStatus;
 import lombok.Builder;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class MissionResponseDto {
 
     @Builder
-    public record MissionListResultDto(
-            List<MissionPreviewDto> missionList,
-            Boolean hasNext,
-            Long lastId
-    ) {
-    }
-
-    @Builder
     public record MissionPreviewDto(
-            Long memberMissionId,
+            Long userMissionId,
             String storeName,
-            String missionCondition,
             Integer rewardPoint,
+            String missionContent,
+            MissionStatus status,
             LocalDate completedAt,
             Boolean canWriteReview
     ) {
