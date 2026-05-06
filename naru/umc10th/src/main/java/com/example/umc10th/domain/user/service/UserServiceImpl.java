@@ -27,8 +27,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto.MyPageResultDto getMyPage(UserRequestDto.GetMyPageDto request) {
-        User user = userRepository.findById(request.userId())
+    public UserResponseDto.MyPageResultDto getMyPage(Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
         return UserConverter.toMyPageResultDto(user);
     }
