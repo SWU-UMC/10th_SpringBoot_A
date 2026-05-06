@@ -35,15 +35,26 @@ public class MissionController {
         return ApiResponse.onSuccess(MissionSuccessCode.MISSION_LIST_READ, result);
     }
 
+    @GetMapping("/available")
+    public ApiResponse<CursorPageResponseDto<MissionResponseDto.AvailableMissionDto>> getAvailableMissionList(
+            @RequestParam Long userId,
+            @RequestParam Long regionId,
+            @RequestParam(required = false) Long cursor,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        CursorPageResponseDto<MissionResponseDto.AvailableMissionDto> result =
+                missionService.getAvailableMissions(userId, regionId, cursor, size);
+
+        return ApiResponse.onSuccess(MissionSuccessCode.MISSION_LIST_READ, result);
+    }
+
     @GetMapping("/summary")
     public ApiResponse<MissionResponseDto.MissionSummaryResultDto> getMissionSummary(
+            @RequestParam Long userId,
             @RequestParam Long regionId
     ) {
-        MissionResponseDto.MissionSummaryResultDto result = MissionResponseDto.MissionSummaryResultDto.builder()
-                .regionName("압구정")
-                .successCount(7)
-                .totalCount(10)
-                .build();
+        MissionResponseDto.MissionSummaryResultDto result =
+                missionService.getRegionProgress(userId, regionId);
 
         return ApiResponse.onSuccess(MissionSuccessCode.MISSION_SUCCESS_SUMMARY_READ, result);
     }

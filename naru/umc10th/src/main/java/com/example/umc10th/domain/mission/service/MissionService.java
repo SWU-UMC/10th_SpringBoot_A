@@ -13,4 +13,16 @@ public interface MissionService {
             Long cursor,
             int size
     );
+
+    CursorPageResponseDto<MissionResponseDto.AvailableMissionDto> getAvailableMissions(
+            Long userId,
+            Long regionId,
+            Long cursor,
+            int size
+    );
+
+    MissionResponseDto.MissionSummaryResultDto getRegionProgress(
+            Long userId,
+            Long regionId
+    );
 }

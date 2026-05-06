@@ -20,10 +20,22 @@ public class MissionResponseDto {
     }
 
     @Builder
+    public record AvailableMissionDto(
+            Long missionId,
+            String storeName,
+            Integer rewardPoint,
+            String missionContent,
+            Long daysUntilDeadline,
+            String foodCategory
+    ) {
+    }
+
+    @Builder
     public record MissionSummaryResultDto(
             String regionName,
             Integer successCount,
-            Integer totalCount
+            Integer totalCount,
+            String progress
     ) {
     }
 
