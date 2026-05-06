@@ -11,4 +11,7 @@ public interface ReviewService {
 
     /** 내가 작성한 리뷰 목록 페이징 조회 */
     ReviewPageResponse getMyReviews(Long userId, int page, int size);
+
+    /** 특정 가게의 리뷰 목록 페이징 조회 */
+    ReviewPageResponse getStoreReviews(Long storeId, int page, int size);
 }

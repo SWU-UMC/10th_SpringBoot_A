@@ -7,6 +7,7 @@ import com.example.umc10th.domain.store.dto.response.StoreResponse;
 import com.example.umc10th.domain.store.entity.Region;
 import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.domain.store.exception.StoreException;
+import com.example.umc10th.domain.store.exception.code.StoreErrorCode;
 import com.example.umc10th.domain.store.repository.RegionRepository;
 import com.example.umc10th.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     public StoreResponse addStore(StoreRequest request) {
         Region region = regionRepository.findById(request.regionId())
-                .orElseThrow(() -> new StoreException("존재하지 않는 지역입니다."));
+                .orElseThrow(() -> new StoreException(StoreErrorCode.REGION_NOT_FOUND));
 
         Store store = StoreConverter.toStore(request, region);
         Store saved = storeRepository.save(store);
@@ -38,7 +39,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public StorePageResponse getStoresByRegion(Long regionId, int page, int size) {
         if (!regionRepository.existsById(regionId)) {
-            throw new StoreException("존재하지 않는 지역입니다.");
+            throw new StoreException(StoreErrorCode.REGION_NOT_FOUND);
         }
         Page<Store> result = storeRepository.findByRegionId(
                 regionId,
