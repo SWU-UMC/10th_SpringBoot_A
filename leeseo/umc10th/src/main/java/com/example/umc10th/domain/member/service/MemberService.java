@@ -27,15 +27,14 @@ public class MemberService {
     private final FoodRepository foodRepository;
 
     public MemberResDto.Profile getProfile(Long id) {
-        Member member = memberRepository.findMemberById(id)
+        Member memberWithFood = memberRepository.findMemberWithFoods(id)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
-        return MemberConverter.toProfile(member);
+        return MemberConverter.toProfile(memberWithFood);
     }
 
     @Transactional
     public void updateProfile(MemberReqDto.Profile dto) {
-        Member member = memberRepository.findMemberById(dto.id())
-                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+        Member member = getMemberById(dto.id());
 
         if (dto.nickname() != null) {
             member.updateNickname(dto.nickname());
@@ -71,11 +70,16 @@ public class MemberService {
 
     @Transactional
     public void updateNickname(MemberReqDto.Nickname dto) {
-        Member member = memberRepository.findMemberById(dto.id())
-                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+        Member member = getMemberById(dto.id());
 
         if (dto.nickname() != null) {
             member.updateNickname(dto.nickname());
         }
+    }
+
+    private Member getMemberById(Long id) {
+        Member member = memberRepository.findMemberById(id)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+        return member;
     }
 }

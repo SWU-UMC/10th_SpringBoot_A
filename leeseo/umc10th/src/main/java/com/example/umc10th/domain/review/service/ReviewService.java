@@ -35,22 +35,25 @@ public class ReviewService {
     public void saveReview(Long storeId, Long memberId, ReviewReqDto.Review dto) {
         Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
-        Store store = storeRepository.findStoreById(storeId)
-                .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
+        Store store = getStoreById(storeId);
         Review review = ReviewConverter.toReview(member, store, dto);
         reviewRepository.save(review);
     }
 
     public List<ReviewInfo> getReviewList(Long storeId) {
-        Store store = storeRepository.findStoreById(storeId)
-                .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
+        Store store = getStoreById(storeId);
         List<Review> reviewList = reviewRepository.getReviewsByStore(store);
         return reviewList.stream().map(ReviewConverter::toReviewInfo).toList();
     }
 
-    public List<ReviewPhotoUrl> getReviewPhotoList(Long storeId) {
+    private Store getStoreById(Long storeId) {
         Store store = storeRepository.findStoreById(storeId)
                 .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
+        return store;
+    }
+
+    public List<ReviewPhotoUrl> getReviewPhotoList(Long storeId) {
+        getStoreById(storeId);
         List<ReviewPhoto> reviewPhotoList = reviewPhotoRepository.getReviewPhotoByStore(storeId);
         return reviewPhotoList.stream().map(ReviewConverter::toReviewPhotoUrl).toList();
     }

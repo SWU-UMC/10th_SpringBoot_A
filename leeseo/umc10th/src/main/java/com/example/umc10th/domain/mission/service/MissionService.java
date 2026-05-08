@@ -35,10 +35,15 @@ public class MissionService {
     private final MissionRepository missionRepository;
 
     public Achievement getMissionAchievement(Address address, Long memberId) {
-        Member member = memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+        Member member = getMemberById(memberId);
 
         return memberMissionRepository.getTotalCountAndSuccessCount(address, member);
+    }
+
+    private Member getMemberById(Long memberId) {
+        Member member = memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+        return member;
     }
 
     public Slice<MissionInfo> getMissionList(Address address, Long cursor) {
@@ -48,8 +53,7 @@ public class MissionService {
 
     @Transactional
     public void saveMemberMission(Long missionId, Long memberId) {
-        Member member = memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+        Member member = getMemberById(memberId);
         Mission mission = missionRepository.findMissionById(missionId)
                 .orElseThrow(() -> new MissionException(MissionErrorCode.MISSION_NOT_FOUND));
         MemberMission memberMission = MissionConverter.toMemberMission(member, mission);
