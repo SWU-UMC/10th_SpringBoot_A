@@ -7,6 +7,7 @@ import com.example.umc10th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class ReviewController implements ReviewControllerDocs{
     @PostMapping("/stores/{storeId}/reviews")
     public ApiResponse<Void> saveReview(
             @PathVariable Long storeId,
-            @RequestBody ReviewReqDto.Review dto,
+            @RequestBody @Valid ReviewReqDto.Review dto,
             @RequestParam Long memberId
     ) {
         reviewService.saveReview(storeId, memberId, dto);
@@ -40,7 +41,7 @@ public class ReviewController implements ReviewControllerDocs{
 
     @GetMapping("/stores/{storeId}/reviews/photos")
     public ApiResponse<List<ReviewPhotoUrl>> getReviewPhotoList(
-            @PathVariable Long storeId
+            @PathVariable @Valid Long storeId
     ) {
         List<ReviewPhotoUrl> response = reviewService.getReviewPhotoList(storeId);
         return ApiResponse.onSuccess(ReviewSuccessCode.REVIEW_PHOTO_LIST_GET_OK, response);
