@@ -1,6 +1,6 @@
-package com.example.umc10th.domain.mission.exception.code;
+package com.example.umc10th.global.apiPayload.code.status;
 
-import com.example.umc10th.global.apiPayload.code.BaseErrorCode;
+import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import com.example.umc10th.global.apiPayload.code.dto.ReasonDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,9 +8,8 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum MissionErrorCode implements BaseErrorCode {
-    MISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "MISSION404", "미션을 찾을 수 없습니다."),
-    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE404", "가게를 찾을 수 없습니다.");
+public enum SuccessStatus implements BaseSuccessCode {
+    OK(HttpStatus.OK, "COMMON200", "Success");
 
     private final HttpStatus httpStatus;
     private final String code;
@@ -18,7 +17,7 @@ public enum MissionErrorCode implements BaseErrorCode {
 
     @Override
     public ReasonDto getReason() {
-        return new ReasonDto(httpStatus, false, code, message);
+        return new ReasonDto(httpStatus, true, code, message);
     }
 
     @Override
