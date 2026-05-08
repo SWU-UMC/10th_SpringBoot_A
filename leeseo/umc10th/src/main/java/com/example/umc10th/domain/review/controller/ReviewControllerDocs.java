@@ -3,6 +3,7 @@ package com.example.umc10th.domain.review.controller;
 import com.example.umc10th.domain.review.dto.ReviewInfo;
 import com.example.umc10th.domain.review.dto.ReviewPhotoUrl;
 import com.example.umc10th.domain.review.dto.ReviewReqDto;
+import com.example.umc10th.domain.review.dto.ReviewResDto;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,9 +28,12 @@ public interface ReviewControllerDocs {
             summary = "리뷰 목록 조회",
             description = "리뷰 목록을 조회합니다."
     )
-    public ApiResponse<List<ReviewInfo>> getReviewList(
-            @PathVariable Long storeId
-    );
+    public ApiResponse<ReviewResDto.Pagination<ReviewInfo>> getReviewList(
+            @PathVariable Long storeId,
+            @RequestParam Integer pageSize,
+            @RequestParam String cursor,
+            @RequestParam String query
+    ) ;
 
     @Operation(
             summary = "리뷰 사진 목록 조회",

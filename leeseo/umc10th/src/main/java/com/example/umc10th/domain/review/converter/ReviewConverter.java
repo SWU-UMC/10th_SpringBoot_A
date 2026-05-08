@@ -5,8 +5,11 @@ import com.example.umc10th.domain.mission.entity.Store;
 import com.example.umc10th.domain.review.dto.ReviewInfo;
 import com.example.umc10th.domain.review.dto.ReviewPhotoUrl;
 import com.example.umc10th.domain.review.dto.ReviewReqDto;
+import com.example.umc10th.domain.review.dto.ReviewResDto;
 import com.example.umc10th.domain.review.entity.Review;
 import com.example.umc10th.domain.review.entity.ReviewPhoto;
+
+import java.util.List;
 
 public class ReviewConverter {
 
@@ -40,6 +43,20 @@ public class ReviewConverter {
     ) {
         return ReviewPhotoUrl.builder()
                 .reviewPhoto(reviewPhoto.getImageUrl())
+                .build();
+    }
+
+    public static <T> ReviewResDto.Pagination<T> toPagination(
+            List<T> data,
+            boolean hasNext,
+            String nextCursor,
+            Integer pageSize
+    ) {
+        return ReviewResDto.Pagination.<T>builder()
+                .data(data)
+                .hasNext(hasNext)
+                .pageSize(pageSize)
+                .nextCursor(nextCursor)
                 .build();
     }
 }

@@ -3,6 +3,7 @@ package com.example.umc10th.domain.review.controller;
 import com.example.umc10th.domain.review.dto.ReviewInfo;
 import com.example.umc10th.domain.review.dto.ReviewPhotoUrl;
 import com.example.umc10th.domain.review.dto.ReviewReqDto;
+import com.example.umc10th.domain.review.dto.ReviewResDto;
 import com.example.umc10th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
@@ -32,10 +33,13 @@ public class ReviewController implements ReviewControllerDocs{
     }
 
     @GetMapping("/stores/{storeId}/reviews")
-    public ApiResponse<List<ReviewInfo>> getReviewList(
-            @PathVariable Long storeId
+    public ApiResponse<ReviewResDto.Pagination<ReviewInfo>> getReviewList(
+            @PathVariable Long storeId,
+            @RequestParam Integer pageSize,
+            @RequestParam String cursor,
+            @RequestParam String query
     ) {
-        List<ReviewInfo> response = reviewService.getReviewList(storeId);
+        ReviewResDto.Pagination<ReviewInfo> response = reviewService.getReviewList(storeId, pageSize, cursor, query);
         return ApiResponse.onSuccess(ReviewSuccessCode.REVIEW_LIST_GET_OK, response);
     }
 
