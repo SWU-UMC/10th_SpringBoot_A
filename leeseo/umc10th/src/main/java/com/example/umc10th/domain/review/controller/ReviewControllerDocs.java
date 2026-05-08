@@ -39,7 +39,10 @@ public interface ReviewControllerDocs {
             summary = "리뷰 사진 목록 조회",
             description = "리뷰 사진 목록을 조회합니다."
     )
-    public ApiResponse<List<ReviewPhotoUrl>> getReviewPhotoList(
-            @PathVariable Long storeId
+    public ApiResponse<ReviewResDto.Pagination<ReviewPhotoUrl>> getReviewPhotoList(
+            @PathVariable Long storeId,
+            @RequestParam Integer pageSize,
+            @RequestParam String cursor,
+            @RequestParam String query
     );
 }

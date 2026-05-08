@@ -22,6 +22,23 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Slice<Review> findReviewsByStore_IdAndIdLessThanOrderByIdDesc(Long storeId, Long idCursor, PageRequest pageRequest);
     Slice<Review> findReviewsByStore_IdOrderByIdDesc(Long storeId, PageRequest pageRequest);
 
-    Slice<Review> findReviewsByStore_IdAndRateLessThanOrderByRateDesc(Long storeId, Long idCursor, PageRequest pageRequest);
-    Slice<Review> findReviewsByStore_IdOrderByRateDesc(Long storeId, PageRequest pageRequest);
+    @Query("""
+        SELECT r
+        FROM Review r
+        WHERE r.store.id = :storeId
+          AND (
+                r.rate < :rateCursor
+                OR (r.rate = :rateCursor AND r.id < :idCursor)
+          )
+        ORDER BY r.rate DESC, r.id DESC
+    """)
+    Slice<Review> findReviewsByRateCursor(Long storeId,  Double rateCursor, Long idCursor, PageRequest pageRequest);
+
+    @Query("""
+        SELECT r
+        FROM Review r
+        WHERE r.store.id = :storeId
+        ORDER BY r.rate DESC, r.id DESC
+    """)
+    Slice<Review> findReviewsOrderByRate(Long storeId, PageRequest pageRequest);
 }

@@ -30,6 +30,7 @@ public class ReviewConverter {
             Review review
     ) {
         return ReviewInfo.builder()
+                .reviewId(review.getId())
                 .rate(review.getRate())
                 .content(review.getContent())
                 .reviewerNickname(review.getMember().getNickname())
@@ -42,6 +43,8 @@ public class ReviewConverter {
             ReviewPhoto reviewPhoto
     ) {
         return ReviewPhotoUrl.builder()
+                .reviewPhotoId(reviewPhoto.getId())
+                .reviewRate(reviewPhoto.getReview().getRate())
                 .reviewPhoto(reviewPhoto.getImageUrl())
                 .build();
     }

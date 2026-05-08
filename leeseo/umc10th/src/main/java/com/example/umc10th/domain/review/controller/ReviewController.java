@@ -36,7 +36,7 @@ public class ReviewController implements ReviewControllerDocs{
     public ApiResponse<ReviewResDto.Pagination<ReviewInfo>> getReviewList(
             @PathVariable Long storeId,
             @RequestParam Integer pageSize,
-            @RequestParam String cursor,
+            @RequestParam (required = false) String cursor,
             @RequestParam String query
     ) {
         ReviewResDto.Pagination<ReviewInfo> response = reviewService.getReviewList(storeId, pageSize, cursor, query);
@@ -44,10 +44,13 @@ public class ReviewController implements ReviewControllerDocs{
     }
 
     @GetMapping("/stores/{storeId}/reviews/photos")
-    public ApiResponse<List<ReviewPhotoUrl>> getReviewPhotoList(
-            @PathVariable @Valid Long storeId
+    public ApiResponse<ReviewResDto.Pagination<ReviewPhotoUrl>> getReviewPhotoList(
+            @PathVariable @Valid Long storeId,
+            @RequestParam Integer pageSize,
+            @RequestParam (required = false) String cursor,
+            @RequestParam String query
     ) {
-        List<ReviewPhotoUrl> response = reviewService.getReviewPhotoList(storeId);
+        ReviewResDto.Pagination<ReviewPhotoUrl> response = reviewService.getReviewPhotoList(storeId, pageSize, cursor, query);
         return ApiResponse.onSuccess(ReviewSuccessCode.REVIEW_PHOTO_LIST_GET_OK, response);
     }
 
