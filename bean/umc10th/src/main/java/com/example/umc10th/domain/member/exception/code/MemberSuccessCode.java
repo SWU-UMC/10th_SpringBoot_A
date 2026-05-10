@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum MemberSuccessCode implements BaseSuccessCode {
-    GET_MY_PAGE_SUCCESS(HttpStatus.OK, "MEMBER2001", "성공적으로 사용자 정보를 조회했습니다.");
+    GET_MY_PAGE_SUCCESS(HttpStatus.OK, "MEMBER2001", "Successfully retrieved user information.");
 
     private final HttpStatus httpStatus;
     private final String code;

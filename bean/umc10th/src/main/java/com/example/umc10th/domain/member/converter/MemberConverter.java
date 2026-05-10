@@ -29,4 +29,14 @@ public final class MemberConverter {
                 member.getNickname()
         );
     }
+
+    public static MemberResDto.GetMyPageResponse toMyPageResponse(Member member, Integer point) {
+        return new MemberResDto.GetMyPageResponse(
+                member.getName(),
+                null,
+                null,
+                null,
+                point
+        );
+    }
 }
