@@ -12,5 +12,5 @@ public interface UserService {
     UserResponseDto.RequestBody requestBody(UserRequestDto.RequestBody dto);
 
     // 마이페이지 조회
-    UserResponseDto.MyPageResultDto getMyPage(UserRequestDto.GetMyPageDto request);
+    UserResponseDto.MyPageResultDto getMyPage(Long userId);
 }

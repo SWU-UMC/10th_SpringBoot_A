@@ -1,28 +1,32 @@
 package com.example.umc10th.domain.mission.dto;
 
+import com.example.umc10th.domain.mission.entity.enums.MissionStatus;
 import lombok.Builder;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class MissionResponseDto {
 
     @Builder
-    public record MissionListResultDto(
-            List<MissionPreviewDto> missionList,
-            Boolean hasNext,
-            Long lastId
+    public record MissionPreviewDto(
+            Long userMissionId,
+            String storeName,
+            Integer rewardPoint,
+            String missionContent,
+            MissionStatus status,
+            LocalDate completedAt,
+            Boolean canWriteReview
     ) {
     }
 
     @Builder
-    public record MissionPreviewDto(
-            Long memberMissionId,
+    public record AvailableMissionDto(
+            Long missionId,
             String storeName,
-            String missionCondition,
             Integer rewardPoint,
-            LocalDate completedAt,
-            Boolean canWriteReview
+            String missionContent,
+            Long daysUntilDeadline,
+            String foodCategory
     ) {
     }
 
@@ -30,7 +34,8 @@ public class MissionResponseDto {
     public record MissionSummaryResultDto(
             String regionName,
             Integer successCount,
-            Integer totalCount
+            Integer totalCount,
+            String progress
     ) {
     }
 
