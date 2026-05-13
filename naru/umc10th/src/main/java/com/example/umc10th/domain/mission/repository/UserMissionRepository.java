@@ -28,4 +28,21 @@ public interface UserMissionRepository extends JpaRepository<UserMission, Long> 
             @Param("cursor") Long cursor,
             Pageable pageable
     );
+
+    @Query("""
+            select um
+            from UserMission um
+            join fetch um.mission m
+            join fetch m.store s
+            where um.user.id = :userId
+              and (:status is null or um.status = :status)
+              and (:regionId is null or s.region.id = :regionId)
+            order by um.id desc
+            """)
+    Slice<UserMission> findMyMissionsByOffset(
+            @Param("userId") Long userId,
+            @Param("status") MissionStatus status,
+            @Param("regionId") Long regionId,
+            Pageable pageable
+    );
 }

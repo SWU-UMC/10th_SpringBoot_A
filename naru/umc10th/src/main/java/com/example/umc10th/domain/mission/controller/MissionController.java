@@ -6,6 +6,7 @@ import com.example.umc10th.domain.mission.exception.code.MissionSuccessCode;
 import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.common.dto.CursorPageResponseDto;
+import com.example.umc10th.global.common.dto.OffsetPageResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,21 @@ public class MissionController {
     ) {
         CursorPageResponseDto<MissionResponseDto.MissionPreviewDto> result =
                 missionService.getMyMissions(userId, status, regionId, cursor, size);
+
+        return ApiResponse.onSuccess(MissionSuccessCode.MISSION_LIST_READ, result);
+    }
+
+    @Operation(summary = "내 미션 목록 오프셋 페이징 조회 API")
+    @GetMapping("/offset")
+    public ApiResponse<OffsetPageResponseDto<MissionResponseDto.MissionPreviewDto>> getMissionListByOffset(
+            @RequestParam Long userId,
+            @RequestParam(required = false) MissionStatus status,
+            @RequestParam(required = false) Long regionId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        OffsetPageResponseDto<MissionResponseDto.MissionPreviewDto> result =
+                missionService.getMyMissionsByOffset(userId, status, regionId, page, size);
 
         return ApiResponse.onSuccess(MissionSuccessCode.MISSION_LIST_READ, result);
     }
