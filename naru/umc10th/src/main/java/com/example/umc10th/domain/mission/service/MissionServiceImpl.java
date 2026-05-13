@@ -16,6 +16,7 @@ import com.example.umc10th.domain.user.exception.UserException;
 import com.example.umc10th.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.UserRepository;
 import com.example.umc10th.global.common.dto.CursorPageResponseDto;
+import com.example.umc10th.global.common.dto.OffsetPageResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -61,6 +62,32 @@ public class MissionServiceImpl implements MissionService {
         );
 
         return CursorPageResponseDto.of(result, MissionResponseDto.MissionPreviewDto::userMissionId);
+    }
+
+    @Override
+    public OffsetPageResponseDto<MissionResponseDto.MissionPreviewDto> getMyMissionsByOffset(
+            Long userId,
+            MissionStatus status,
+            Long regionId,
+            int page,
+            int size
+    ) {
+        validateUser(userId);
+
+        int pageNumber = normalizePage(page);
+        int pageSize = normalizeSize(size);
+        Slice<UserMission> userMissions = userMissionRepository.findMyMissionsByOffset(
+                userId,
+                status,
+                regionId,
+                PageRequest.of(pageNumber, pageSize)
+        );
+
+        Slice<MissionResponseDto.MissionPreviewDto> result = userMissions.map(userMission ->
+                MissionConverter.toMissionPreviewDto(userMission, canWriteReview(userMission))
+        );
+
+        return OffsetPageResponseDto.of(result);
     }
 
     @Override
@@ -121,6 +148,10 @@ public class MissionServiceImpl implements MissionService {
         }
 
         return Math.min(size, MAX_PAGE_SIZE);
+    }
+
+    private int normalizePage(int page) {
+        return Math.max(page, 0);
     }
 
     private boolean canWriteReview(UserMission userMission) {
