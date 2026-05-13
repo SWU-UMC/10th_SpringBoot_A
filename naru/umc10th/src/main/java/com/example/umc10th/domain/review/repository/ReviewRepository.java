@@ -31,10 +31,14 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             join fetch r.user u
             where u.id = :userId
               and (
-                :cursorId is null
-                or :cursorRating is null
-                or r.rating < :cursorRating
-                or (r.rating = :cursorRating and r.id < :cursorId)
+                (:cursorRating is null and :cursorId is null)
+                or (
+                    :cursorRating is not null
+                    and (
+                        r.rating < :cursorRating
+                        or (:cursorId is not null and r.rating = :cursorRating and r.id < :cursorId)
+                    )
+                )
               )
             order by r.rating desc, r.id desc
             """)
