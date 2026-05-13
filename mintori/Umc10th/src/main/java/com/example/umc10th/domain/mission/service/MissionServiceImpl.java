@@ -3,6 +3,7 @@ package com.example.umc10th.domain.mission.service;
 import com.example.umc10th.domain.mission.converter.MissionConverter;
 import com.example.umc10th.domain.mission.dto.request.ChallengeMissionRequest;
 import com.example.umc10th.domain.mission.dto.request.MissionRequest;
+import com.example.umc10th.domain.mission.dto.request.UserMissionPageRequest;
 import com.example.umc10th.domain.mission.dto.response.MissionResponse;
 import com.example.umc10th.domain.mission.dto.response.UserMissionPageResponse;
 import com.example.umc10th.domain.mission.dto.response.UserMissionResponse;
@@ -68,7 +69,12 @@ public class MissionServiceImpl implements MissionService {
     }
 
     @Override
-    public UserMissionPageResponse getUserMissions(Long userId, MissionStatus status, int page, int size) {
+    public UserMissionPageResponse getUserMissions(UserMissionPageRequest request) {
+        Long userId = request.userId();
+        MissionStatus status = request.status();
+        int page = request.page();
+        int size = request.size();
+
         if (!userRepository.existsById(userId)) {
             throw new UserException(UserErrorCode.USER_NOT_FOUND);
         }
@@ -76,6 +82,7 @@ public class MissionServiceImpl implements MissionService {
             throw new MissionException(MissionErrorCode.INVALID_MISSION_STATUS);
         }
 
+        // 오프셋 기반 페이지네이션 (최신순)
         Page<UserMission> result = userMissionRepository.findByUserIdAndStatus(
                 userId,
                 status,
