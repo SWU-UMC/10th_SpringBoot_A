@@ -11,7 +11,9 @@ import com.example.umc10th.domain.review.entity.Review;
 import com.example.umc10th.domain.review.exception.ReviewException;
 import com.example.umc10th.domain.review.exception.code.ReviewErrorCode;
 import com.example.umc10th.domain.review.repository.ReviewRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,5 +45,70 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review savedReview = reviewRepository.save(ReviewConverter.toEntity(request, member, store));
         return ReviewConverter.toReviewInfo(savedReview);
+    }
+
+    @Override
+    public ReviewResDto.MyReviewsByIdCursorResponse getMyReviewsByIdCursor(ReviewReqDto.MyReviewsByIdCursorRequest request) {
+        memberRepository.findById(request.memberId())
+                .orElseThrow(() -> new ReviewException(ReviewErrorCode.MEMBER_NOT_FOUND));
+
+        int fetchSize = request.size() + 1;
+        PageRequest pageRequest = PageRequest.of(0, fetchSize);
+
+        List<Review> reviews = request.cursorId() == null
+                ? reviewRepository.findMyReviewsByIdCursorFirst(request.memberId(), pageRequest)
+                : reviewRepository.findMyReviewsByIdCursorNext(request.memberId(), request.cursorId(), pageRequest);
+
+        boolean hasNext = reviews.size() > request.size();
+        List<Review> content = hasNext ? reviews.subList(0, request.size()) : reviews;
+
+        List<ReviewResDto.MyReviewItem> items = content.stream()
+                .map(ReviewConverter::toMyReviewItem)
+                .toList();
+
+        Long nextCursorId = hasNext ? content.get(content.size() - 1).getId() : null;
+        return ReviewConverter.toMyReviewsByIdCursorResponse(items, nextCursorId, hasNext);
+    }
+
+    @Override
+    public ReviewResDto.MyReviewsByScoreCursorResponse getMyReviewsByScoreCursor(ReviewReqDto.MyReviewsByScoreCursorRequest request) {
+        memberRepository.findById(request.memberId())
+                .orElseThrow(() -> new ReviewException(ReviewErrorCode.MEMBER_NOT_FOUND));
+
+        boolean bothCursorProvided = request.cursorScore() != null && request.cursorId() != null;
+        boolean bothCursorEmpty = request.cursorScore() == null && request.cursorId() == null;
+        if (!bothCursorProvided && !bothCursorEmpty) {
+            throw new ReviewException(ReviewErrorCode.INVALID_CURSOR);
+        }
+
+        int fetchSize = request.size() + 1;
+        PageRequest pageRequest = PageRequest.of(0, fetchSize);
+
+        List<Review> reviews = bothCursorEmpty
+                ? reviewRepository.findMyReviewsByScoreCursorFirst(request.memberId(), pageRequest)
+                : reviewRepository.findMyReviewsByScoreCursorNext(
+                request.memberId(),
+                request.cursorScore(),
+                request.cursorId(),
+                pageRequest
+        );
+
+        boolean hasNext = reviews.size() > request.size();
+        List<Review> content = hasNext ? reviews.subList(0, request.size()) : reviews;
+
+        List<ReviewResDto.MyReviewItem> items = content.stream()
+                .map(ReviewConverter::toMyReviewItem)
+                .toList();
+
+        Float nextCursorScore = null;
+        Long nextCursorId = null;
+
+        if (hasNext) {
+            Review lastReview = content.get(content.size() - 1);
+            nextCursorScore = lastReview.getScore();
+            nextCursorId = lastReview.getId();
+        }
+
+        return ReviewConverter.toMyReviewsByScoreCursorResponse(items, nextCursorScore, nextCursorId, hasNext);
     }
 }

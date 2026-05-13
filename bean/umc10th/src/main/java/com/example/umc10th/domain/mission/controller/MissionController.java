@@ -37,6 +37,13 @@ public class MissionController {
         return ResponseEntity.ok(ApiResponse.onSuccess(missionService.createMission(request)));
     }
 
+    @PostMapping("/my/challenging")
+    public ResponseEntity<ApiResponse<MissionResDto.MemberMissionPageResponse>> getMyChallengingMissions(
+            @Valid @RequestBody MissionReqDto.MyChallengingMissionsRequest request
+    ) {
+        return ResponseEntity.ok(ApiResponse.onSuccess(missionService.getMyChallengingMissions(request)));
+    }
+
     @GetMapping("/members/{memberId}")
     public ResponseEntity<ApiResponse<MissionResDto.MemberMissionPageResponse>> getMemberMissions(
             @PathVariable Long memberId,
