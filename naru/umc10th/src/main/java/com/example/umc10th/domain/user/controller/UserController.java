@@ -10,6 +10,7 @@ import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +54,7 @@ public class UserController {
     @Operation(summary = "요청 본문 전달 테스트 API")
     @PostMapping("/request-body")
     public UserResponseDto.RequestBody requestBody(
-            @RequestBody UserRequestDto.RequestBody dto
+            @RequestBody @Valid UserRequestDto.RequestBody dto
     ) {
         return userService.requestBody(dto);
     }
