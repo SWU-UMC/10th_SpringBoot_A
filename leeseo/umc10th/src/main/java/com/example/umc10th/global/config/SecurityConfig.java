@@ -1,5 +1,7 @@
 package com.example.umc10th.global.config;
 
+import com.example.umc10th.global.security.handler.CustomAccessDenied;
+import com.example.umc10th.global.security.handler.CustomEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,6 +39,10 @@ public class SecurityConfig {
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
+                )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(customAccessDenied())
+                        .authenticationEntryPoint(customEntryPoint())
                 );
 
         return http.build();
@@ -45,5 +51,15 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CustomAccessDenied customAccessDenied() {
+        return new CustomAccessDenied();
+    }
+
+    @Bean
+    public CustomEntryPoint customEntryPoint() {
+        return new CustomEntryPoint();
     }
 }
