@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum MemberErrorCode implements BaseErrorCode {
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND,
-            "MEMBER404_1",
-            "해당 아이디의 회원이 존재하지 않습니다.");
+public enum FoodErrorCode implements BaseErrorCode {
+    FOOD_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND,
+            "FOOD404_1",
+            "해당 음식 타입이 존재하지 않습니다.");
 
     private final HttpStatus status;
     private final String code;
