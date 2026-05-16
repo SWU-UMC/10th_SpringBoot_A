@@ -1,11 +1,10 @@
-package com.example.umc10th.domain.review.exception;
+package com.example.umc10th.domain.auth.exception;
 
 import com.example.umc10th.global.apiPayload.code.BaseErrorCode;
 import com.example.umc10th.global.apiPayload.exception.BaseException;
 
-public class ReviewException extends BaseException {
-
-    public ReviewException(BaseErrorCode errorCode) {
+public class AuthException extends BaseException {
+    public AuthException(BaseErrorCode errorCode) {
         super(errorCode);
     }
 }

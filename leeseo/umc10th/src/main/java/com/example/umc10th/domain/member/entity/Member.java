@@ -47,6 +47,9 @@ public class Member extends BaseEntity {
     @Column(name = "email", unique = true)
     private String email;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
@@ -80,13 +83,14 @@ public class Member extends BaseEntity {
     @Column(name = "is_owner", nullable = false)
     private Boolean isOwner = false;
 
-    @OneToMany(mappedBy = "member")
+    @Builder.Default
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberFood> memberFoodList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberTerm> memberTermList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberMission> memberMissionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
@@ -113,6 +117,7 @@ public class Member extends BaseEntity {
     }
 
     public void updateFoodList(List<Food> foodList) {
+        if (foodList == null) return;
         List<MemberFood> list = new ArrayList<>();
         for (Food food : foodList) {
             list.add(MemberConverter.toMemberFood(food, this));
