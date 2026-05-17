@@ -35,7 +35,7 @@ public class Mission {
     @Column(name = "rewards_point", nullable = false)
     private Integer rewardsPoint;
 
-    @OneToMany(mappedBy = "mission")
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberMission> memberMissionList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

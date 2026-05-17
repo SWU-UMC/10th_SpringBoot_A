@@ -3,10 +3,12 @@ package com.example.umc10th.domain.review.controller;
 import com.example.umc10th.domain.review.dto.ReviewInfo;
 import com.example.umc10th.domain.review.dto.ReviewPhotoUrl;
 import com.example.umc10th.domain.review.dto.ReviewReqDto;
+import com.example.umc10th.domain.review.dto.ReviewResDto;
 import com.example.umc10th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +25,7 @@ public class ReviewController implements ReviewControllerDocs{
     @PostMapping("/stores/{storeId}/reviews")
     public ApiResponse<Void> saveReview(
             @PathVariable Long storeId,
-            @RequestBody ReviewReqDto.Review dto,
+            @RequestBody @Valid ReviewReqDto.Review dto,
             @RequestParam Long memberId
     ) {
         reviewService.saveReview(storeId, memberId, dto);
@@ -31,18 +33,24 @@ public class ReviewController implements ReviewControllerDocs{
     }
 
     @GetMapping("/stores/{storeId}/reviews")
-    public ApiResponse<List<ReviewInfo>> getReviewList(
-            @PathVariable Long storeId
+    public ApiResponse<ReviewResDto.Pagination<ReviewInfo>> getReviewList(
+            @PathVariable Long storeId,
+            @RequestParam Integer pageSize,
+            @RequestParam (required = false) String cursor,
+            @RequestParam String query
     ) {
-        List<ReviewInfo> response = reviewService.getReviewList(storeId);
+        ReviewResDto.Pagination<ReviewInfo> response = reviewService.getReviewList(storeId, pageSize, cursor, query);
         return ApiResponse.onSuccess(ReviewSuccessCode.REVIEW_LIST_GET_OK, response);
     }
 
     @GetMapping("/stores/{storeId}/reviews/photos")
-    public ApiResponse<List<ReviewPhotoUrl>> getReviewPhotoList(
-            @PathVariable Long storeId
+    public ApiResponse<ReviewResDto.Pagination<ReviewPhotoUrl>> getReviewPhotoList(
+            @PathVariable @Valid Long storeId,
+            @RequestParam Integer pageSize,
+            @RequestParam (required = false) String cursor,
+            @RequestParam String query
     ) {
-        List<ReviewPhotoUrl> response = reviewService.getReviewPhotoList(storeId);
+        ReviewResDto.Pagination<ReviewPhotoUrl> response = reviewService.getReviewPhotoList(storeId, pageSize, cursor, query);
         return ApiResponse.onSuccess(ReviewSuccessCode.REVIEW_PHOTO_LIST_GET_OK, response);
     }
 

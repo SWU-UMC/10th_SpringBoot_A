@@ -7,6 +7,7 @@ import java.util.List;
 
 @Builder
 public record ReviewInfo(
+        Long reviewId,
         double rate,
         String content,
         List<ReviewPhotoUrl> reviewPhotoList,
