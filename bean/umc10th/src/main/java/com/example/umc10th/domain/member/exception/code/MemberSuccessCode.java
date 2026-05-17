@@ -1,6 +1,6 @@
-package com.example.umc10th.domain.store.exception.code;
+package com.example.umc10th.domain.member.exception.code;
 
-import com.example.umc10th.global.apiPayload.code.BaseErrorCode;
+import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import com.example.umc10th.global.apiPayload.code.dto.ReasonDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum StoreErrorCode implements BaseErrorCode {
-    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE404", "Store not found.");
+public enum MemberSuccessCode implements BaseSuccessCode {
+    GET_MY_PAGE_SUCCESS(HttpStatus.OK, "MEMBER2001", "Successfully retrieved user information.");
 
     private final HttpStatus httpStatus;
     private final String code;
@@ -17,7 +17,7 @@ public enum StoreErrorCode implements BaseErrorCode {
 
     @Override
     public ReasonDto getReason() {
-        return new ReasonDto(httpStatus, false, code, message);
+        return new ReasonDto(httpStatus, true, code, message);
     }
 
     @Override

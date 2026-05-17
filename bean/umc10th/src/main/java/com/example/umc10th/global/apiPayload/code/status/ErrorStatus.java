@@ -1,4 +1,4 @@
-package com.example.umc10th.domain.review.exception.code;
+package com.example.umc10th.global.apiPayload.code.status;
 
 import com.example.umc10th.global.apiPayload.code.BaseErrorCode;
 import com.example.umc10th.global.apiPayload.code.dto.ReasonDto;
@@ -8,11 +8,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum ReviewErrorCode implements BaseErrorCode {
-    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW404", "Review not found."),
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER404", "User not found."),
-    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE404", "Store not found."),
-    INVALID_CURSOR(HttpStatus.BAD_REQUEST, "REVIEW4001", "Invalid cursor request.");
+public enum ErrorStatus implements BaseErrorCode {
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "Server error."),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON400", "Bad request."),
+    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "COMMON4001", "Validation failed.");
 
     private final HttpStatus httpStatus;
     private final String code;

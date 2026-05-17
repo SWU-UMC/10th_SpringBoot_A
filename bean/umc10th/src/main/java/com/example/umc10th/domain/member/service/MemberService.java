@@ -7,4 +7,6 @@ public interface MemberService {
     MemberResDto.MemberInfo getMember(Long memberId);
 
     MemberResDto.MemberInfo createMember(MemberReqDto.Create request);
+
+    MemberResDto.GetMyPageResponse getMyPage(Long memberId);
 }

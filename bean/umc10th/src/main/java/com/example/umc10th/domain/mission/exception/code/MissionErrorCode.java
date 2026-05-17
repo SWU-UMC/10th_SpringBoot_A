@@ -1,16 +1,28 @@
 package com.example.umc10th.domain.mission.exception.code;
 
+import com.example.umc10th.global.apiPayload.code.BaseErrorCode;
+import com.example.umc10th.global.apiPayload.code.dto.ReasonDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum MissionErrorCode {
-    MISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "MISSION404", "�̼��� ã�� �� �����ϴ�."),
-    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE404", "���Ը� ã�� �� �����ϴ�.");
+public enum MissionErrorCode implements BaseErrorCode {
+    MISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "MISSION404", "Mission not found."),
+    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE404", "Store not found.");
 
-    private final HttpStatus status;
+    private final HttpStatus httpStatus;
     private final String code;
     private final String message;
+
+    @Override
+    public ReasonDto getReason() {
+        return new ReasonDto(httpStatus, false, code, message);
+    }
+
+    @Override
+    public ReasonDto getReasonHttpStatus() {
+        return getReason();
+    }
 }
