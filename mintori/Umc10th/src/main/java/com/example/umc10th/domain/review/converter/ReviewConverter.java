@@ -9,6 +9,7 @@ import com.example.umc10th.domain.review.enums.ReviewSortType;
 import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.domain.user.entity.User;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -54,19 +55,13 @@ public class ReviewConverter {
         );
     }
 
-    /**
-     * 커서 기반 페이지네이션 응답 변환.
-     *  - rows 는 size+1 개를 조회한 결과 (다음 페이지 존재 여부 판단용)
-     *  - 마지막 아이템의 (id, score) 를 다음 cursor 로 노출
-     *  - sortType == ID 인 경우 nextCursorScore 는 항상 null
-     */
     public static MyReviewCursorResponse toMyReviewCursorResponse(
-            List<Review> rows,
+            Slice<Review> rows,
             int size,
             ReviewSortType sortType
     ) {
-        boolean hasNext = rows.size() > size;
-        List<Review> page = hasNext ? rows.subList(0, size) : rows;
+        boolean hasNext = rows.hasNext();
+        List<Review> page = rows.getContent();
 
         Long nextCursorId = null;
         BigDecimal nextCursorScore = null;

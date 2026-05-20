@@ -44,7 +44,6 @@ public class ReviewController {
     }
 
 
-    // 미션 미션과 동일한 컨벤션 (사용자 ID를 Request Body로 받기, 하드코딩 금지) 을 유지하기 위해서 추가한 코드
     @PostMapping("/me")
     public ApiResponse<MyReviewCursorResponse> getMyReviewsByCursor(
             @Valid @RequestBody MyReviewCursorRequest request
