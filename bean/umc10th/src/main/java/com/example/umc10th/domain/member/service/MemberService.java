@@ -9,4 +9,6 @@ public interface MemberService {
     MemberResDto.MemberInfo createMember(MemberReqDto.Create request);
 
     MemberResDto.GetMyPageResponse getMyPage(Long memberId);
+
+    MemberResDto.SignUpResponse signUp(MemberReqDto.SignUpRequest request);
 }
