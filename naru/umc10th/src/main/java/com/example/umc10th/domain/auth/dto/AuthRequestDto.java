@@ -1,6 +1,7 @@
 package com.example.umc10th.domain.auth.dto;
 
 import com.example.umc10th.domain.user.entity.enums.Gender;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -34,6 +35,17 @@ public class AuthRequestDto {
             String address,
 
             @NotEmpty(message = "선호 음식 종류는 1개 이상 선택해야 합니다.")
-            List<@NotBlank(message = "선호 음식 이름은 비어 있을 수 없습니다.") String> preferredFoods
+            List<@NotBlank(message = "선호 음식 이름은 비어 있을 수 없습니다.") String> preferredFoods,
+
+            @NotEmpty(message = "약관 동의 목록은 필수입니다.")
+            List<@Valid AgreementDto> agreements
+    ) {}
+
+    public record AgreementDto(
+            @NotNull(message = "약관 ID는 필수입니다.")
+            Long termId,
+
+            @NotNull(message = "약관 동의 여부는 필수입니다.")
+            Boolean isAgreed
     ) {}
 }
