@@ -12,6 +12,7 @@ import com.example.umc10th.domain.user.exception.UserException;
 import com.example.umc10th.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMissionRepository userMissionRepository;
     private final ReviewRepository reviewRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -30,7 +32,9 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(request.email())) {
             throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
         }
-        User user = UserConverter.toUser(request);
+        // BCrypt 로 비밀번호를 솔트와 함께 해시 처리
+        String encodedPassword = passwordEncoder.encode(request.password());
+        User user = UserConverter.toUser(request, encodedPassword);
         User saved = userRepository.save(user);
         return UserConverter.toUserResponse(saved);
     }

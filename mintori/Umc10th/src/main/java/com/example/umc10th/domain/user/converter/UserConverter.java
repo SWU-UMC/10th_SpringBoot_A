@@ -10,11 +10,11 @@ public class UserConverter {
     private UserConverter() {
     }
 
-    public static User toUser(UserRequest request) {
+    public static User toUser(UserRequest request, String encodedPassword) {
         return User.builder()
                 .name(request.name())
                 .email(request.email())
-                .password(request.password())
+                .password(encodedPassword)
                 .gender(request.gender())
                 .address(request.address())
                 .point(0L)
