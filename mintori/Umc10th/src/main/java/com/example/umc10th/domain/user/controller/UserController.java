@@ -1,7 +1,9 @@
 package com.example.umc10th.domain.user.controller;
 
+import com.example.umc10th.domain.user.dto.request.LoginRequest;
 import com.example.umc10th.domain.user.dto.request.UserRequest;
 import com.example.umc10th.domain.user.dto.response.MyPageResponse;
+import com.example.umc10th.domain.user.dto.response.TokenResponse;
 import com.example.umc10th.domain.user.dto.response.UserResponse;
 import com.example.umc10th.domain.user.service.UserService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
@@ -25,6 +27,11 @@ public class UserController {
     @PostMapping("/signup")
     public ApiResponse<UserResponse> signUp(@Valid @RequestBody UserRequest request) {
         return ApiResponse.onSuccess(GeneralSuccessCode.CREATED, userService.signUp(request));
+    }
+
+    @PostMapping("/login")
+    public ApiResponse<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
+        return ApiResponse.onSuccess(GeneralSuccessCode.OK, userService.login(request));
     }
 
     @GetMapping("/{userId}/mypage")
