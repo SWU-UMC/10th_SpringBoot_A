@@ -8,9 +8,11 @@ import com.example.umc10th.domain.review.entity.Review;
 import com.example.umc10th.domain.review.repository.ReviewRepository;
 import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.domain.store.exception.StoreException;
+import com.example.umc10th.domain.store.exception.code.StoreErrorCode;
 import com.example.umc10th.domain.store.repository.StoreRepository;
 import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.domain.user.exception.UserException;
+import com.example.umc10th.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,10 +34,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public ReviewResponse writeReview(ReviewRequest request) {
         User user = userRepository.findById(request.userId())
-                .orElseThrow(() -> new UserException("존재하지 않는 유저입니다."));
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         Store store = storeRepository.findById(request.storeId())
-                .orElseThrow(() -> new StoreException("존재하지 않는 가게입니다."));
+                .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
 
         Review review = ReviewConverter.toReview(request, user, store);
         Review saved = reviewRepository.save(review);
@@ -45,11 +47,24 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewPageResponse getMyReviews(Long userId, int page, int size) {
         if (!userRepository.existsById(userId)) {
-            throw new UserException("존재하지 않는 유저입니다.");
+            throw new UserException(UserErrorCode.USER_NOT_FOUND);
         }
 
         Page<Review> result = reviewRepository.findByUserId(
                 userId,
+                PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"))
+        );
+        return ReviewConverter.toReviewPageResponse(result);
+    }
+
+    @Override
+    public ReviewPageResponse getStoreReviews(Long storeId, int page, int size) {
+        if (!storeRepository.existsById(storeId)) {
+            throw new StoreException(StoreErrorCode.STORE_NOT_FOUND);
+        }
+
+        Page<Review> result = reviewRepository.findByStoreId(
+                storeId,
                 PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"))
         );
         return ReviewConverter.toReviewPageResponse(result);

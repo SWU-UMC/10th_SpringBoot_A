@@ -1,11 +1,15 @@
 package com.example.umc10th.domain.user.controller;
 
 import com.example.umc10th.domain.user.dto.request.UserRequest;
+import com.example.umc10th.domain.user.dto.response.MyPageResponse;
 import com.example.umc10th.domain.user.dto.response.UserResponse;
 import com.example.umc10th.domain.user.service.UserService;
+import com.example.umc10th.global.apiPayload.ApiResponse;
+import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +22,13 @@ public class UserController {
 
     private final UserService userService;
 
-    /**
-     * 회원가입 API
-     * POST /api/users/signup
-     */
     @PostMapping("/signup")
-    public ResponseEntity<UserResponse> signUp(@Valid @RequestBody UserRequest request) {
-        return ResponseEntity.ok(userService.signUp(request));
+    public ApiResponse<UserResponse> signUp(@Valid @RequestBody UserRequest request) {
+        return ApiResponse.onSuccess(GeneralSuccessCode.CREATED, userService.signUp(request));
+    }
+
+    @GetMapping("/{userId}/mypage")
+    public ApiResponse<MyPageResponse> getMyPage(@PathVariable Long userId) {
+        return ApiResponse.onSuccess(GeneralSuccessCode.OK, userService.getMyPage(userId));
     }
 }
