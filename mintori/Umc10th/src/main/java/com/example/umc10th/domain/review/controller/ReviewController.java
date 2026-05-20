@@ -1,6 +1,8 @@
 package com.example.umc10th.domain.review.controller;
 
+import com.example.umc10th.domain.review.dto.request.MyReviewCursorRequest;
 import com.example.umc10th.domain.review.dto.request.ReviewRequest;
+import com.example.umc10th.domain.review.dto.response.MyReviewCursorResponse;
 import com.example.umc10th.domain.review.dto.response.ReviewPageResponse;
 import com.example.umc10th.domain.review.dto.response.ReviewResponse;
 import com.example.umc10th.domain.review.service.ReviewService;
@@ -28,6 +30,7 @@ public class ReviewController {
         return ApiResponse.onSuccess(GeneralSuccessCode.CREATED, reviewService.writeReview(request));
     }
 
+    // 기존 오프셋 기반 내 리뷰 조회 API
     @GetMapping("/me")
     public ApiResponse<ReviewPageResponse> getMyReviews(
             @RequestParam Long userId,
@@ -37,6 +40,17 @@ public class ReviewController {
         return ApiResponse.onSuccess(
                 GeneralSuccessCode.OK,
                 reviewService.getMyReviews(userId, page, size)
+        );
+    }
+
+
+    @PostMapping("/me")
+    public ApiResponse<MyReviewCursorResponse> getMyReviewsByCursor(
+            @Valid @RequestBody MyReviewCursorRequest request
+    ) {
+        return ApiResponse.onSuccess(
+                GeneralSuccessCode.OK,
+                reviewService.getMyReviewsByCursor(request)
         );
     }
 

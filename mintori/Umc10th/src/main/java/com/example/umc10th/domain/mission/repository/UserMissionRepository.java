@@ -18,7 +18,6 @@ public interface UserMissionRepository extends JpaRepository<UserMission, Long> 
 
     long countByUserIdAndStatus(Long userId, MissionStatus status);
 
-    /** 홈 화면용 - 유저가 이미 도전중이거나 완료한 미션 ID 목록 (도전 가능 미션에서 제외할 용도) */
     @Query("select um.mission.id from UserMission um where um.user.id = :userId")
     List<Long> findMissionIdsByUserId(@Param("userId") Long userId);
 }

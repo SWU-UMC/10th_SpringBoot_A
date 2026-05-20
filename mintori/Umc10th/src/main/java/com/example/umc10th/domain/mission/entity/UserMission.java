@@ -51,7 +51,6 @@ public class UserMission extends BaseEntity {
     @Column(name = "status", nullable = false, length = 20)
     private MissionStatus status;
 
-    /** 도전 중 미션을 완료 상태로 변경 */
     public void complete() {
         this.status = MissionStatus.COMPLETED;
     }

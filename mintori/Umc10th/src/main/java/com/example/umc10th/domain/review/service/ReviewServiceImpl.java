@@ -1,10 +1,15 @@
 package com.example.umc10th.domain.review.service;
 
 import com.example.umc10th.domain.review.converter.ReviewConverter;
+import com.example.umc10th.domain.review.dto.request.MyReviewCursorRequest;
 import com.example.umc10th.domain.review.dto.request.ReviewRequest;
+import com.example.umc10th.domain.review.dto.response.MyReviewCursorResponse;
 import com.example.umc10th.domain.review.dto.response.ReviewPageResponse;
 import com.example.umc10th.domain.review.dto.response.ReviewResponse;
 import com.example.umc10th.domain.review.entity.Review;
+import com.example.umc10th.domain.review.enums.ReviewSortType;
+import com.example.umc10th.domain.review.exception.ReviewException;
+import com.example.umc10th.domain.review.exception.code.ReviewErrorCode;
 import com.example.umc10th.domain.review.repository.ReviewRepository;
 import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.domain.store.exception.StoreException;
@@ -17,9 +22,12 @@ import com.example.umc10th.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +63,47 @@ public class ReviewServiceImpl implements ReviewService {
                 PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"))
         );
         return ReviewConverter.toReviewPageResponse(result);
+    }
+
+
+    @Override
+    public MyReviewCursorResponse getMyReviewsByCursor(MyReviewCursorRequest request) {
+        Long userId = request.userId();
+        ReviewSortType sortType = request.sortType();
+        int size = request.size();
+
+        if (!userRepository.existsById(userId)) {
+            throw new UserException(UserErrorCode.USER_NOT_FOUND);
+        }
+        if (sortType == null) {
+            throw new ReviewException(ReviewErrorCode.INVALID_REVIEW_SORT_TYPE);
+        }
+
+        // Slice가 내부적으로 size + 1개를 조회해 hasNext를 판단
+        PageRequest limit = PageRequest.of(0, size);
+
+        Slice<Review> rows;
+        if (sortType == ReviewSortType.ID) {
+            rows = reviewRepository.findMyReviewsByCursorId(
+                    userId,
+                    request.cursorId(),
+                    limit
+            );
+        } else {
+            BigDecimal cursorScore = request.cursorScore();
+            Long cursorId = request.cursorId();
+            if ((cursorScore == null) ^ (cursorId == null)) {
+                throw new ReviewException(ReviewErrorCode.INVALID_REVIEW_CURSOR);
+            }
+            rows = reviewRepository.findMyReviewsByCursorScore(
+                    userId,
+                    cursorScore,
+                    cursorId,
+                    limit
+            );
+        }
+
+        return ReviewConverter.toMyReviewCursorResponse(rows, size, sortType);
     }
 
     @Override

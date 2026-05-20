@@ -1,13 +1,17 @@
 package com.example.umc10th.domain.review.converter;
 
 import com.example.umc10th.domain.review.dto.request.ReviewRequest;
+import com.example.umc10th.domain.review.dto.response.MyReviewCursorResponse;
 import com.example.umc10th.domain.review.dto.response.ReviewPageResponse;
 import com.example.umc10th.domain.review.dto.response.ReviewResponse;
 import com.example.umc10th.domain.review.entity.Review;
+import com.example.umc10th.domain.review.enums.ReviewSortType;
 import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.domain.user.entity.User;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ReviewConverter {
@@ -48,6 +52,38 @@ public class ReviewConverter {
                 page.getTotalElements(),
                 page.getTotalPages(),
                 page.hasNext()
+        );
+    }
+
+    public static MyReviewCursorResponse toMyReviewCursorResponse(
+            Slice<Review> rows,
+            int size,
+            ReviewSortType sortType
+    ) {
+        boolean hasNext = rows.hasNext();
+        List<Review> page = rows.getContent();
+
+        Long nextCursorId = null;
+        BigDecimal nextCursorScore = null;
+
+        if (hasNext && !page.isEmpty()) {
+            Review last = page.get(page.size() - 1);
+            nextCursorId = last.getId();
+            if (sortType == ReviewSortType.SCORE) {
+                nextCursorScore = last.getScore();
+            }
+        }
+
+        List<ReviewResponse> reviews = page.stream()
+                .map(ReviewConverter::toReviewResponse)
+                .toList();
+
+        return new MyReviewCursorResponse(
+                reviews,
+                size,
+                hasNext,
+                nextCursorId,
+                nextCursorScore
         );
     }
 }
