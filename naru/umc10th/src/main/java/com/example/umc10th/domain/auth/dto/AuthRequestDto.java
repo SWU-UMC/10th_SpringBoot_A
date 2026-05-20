@@ -34,11 +34,13 @@ public class AuthRequestDto {
             @NotBlank(message = "주소는 필수입니다.")
             String address,
 
+            @NotNull(message = "선호 음식 종류는 필수입니다.")
             @NotEmpty(message = "선호 음식 종류는 1개 이상 선택해야 합니다.")
             List<@NotBlank(message = "선호 음식 이름은 비어 있을 수 없습니다.") String> preferredFoods,
 
-            @NotEmpty(message = "약관 동의 목록은 필수입니다.")
-            List<@Valid AgreementDto> agreements
+            @NotNull(message = "약관 동의 목록은 필수입니다.")
+            @NotEmpty(message = "약관 동의 목록은 1개 이상이어야 합니다.")
+            List<@NotNull(message = "약관 동의 항목은 null일 수 없습니다.") @Valid AgreementDto> agreements
     ) {}
 
     public record AgreementDto(
