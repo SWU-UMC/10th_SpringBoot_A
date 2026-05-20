@@ -3,9 +3,9 @@ package com.example.umc10th.domain.auth.dto;
 import com.example.umc10th.domain.user.entity.enums.Gender;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -34,9 +34,9 @@ public class AuthRequestDto {
             @NotBlank(message = "주소는 필수입니다.")
             String address,
 
-            @NotNull(message = "선호 음식 종류는 필수입니다.")
-            @NotEmpty(message = "선호 음식 종류는 1개 이상 선택해야 합니다.")
-            List<@NotBlank(message = "선호 음식 이름은 비어 있을 수 없습니다.") String> preferredFoods,
+            @NotNull(message = "선호 음식 카테고리는 필수입니다.")
+            @NotEmpty(message = "선호 음식 카테고리는 1개 이상 선택해야 합니다.")
+            List<@NotNull(message = "선호 음식 카테고리 ID는 필수입니다.") Long> preferredFoodCategoryIds,
 
             @NotNull(message = "약관 동의 목록은 필수입니다.")
             @NotEmpty(message = "약관 동의 목록은 1개 이상이어야 합니다.")

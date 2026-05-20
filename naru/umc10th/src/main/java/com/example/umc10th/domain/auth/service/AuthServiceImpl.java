@@ -54,24 +54,16 @@ public class AuthServiceImpl implements AuthService {
 
         validateRequiredTerms(agreementMap);
         List<Term> requestedTerms = getRequestedTerms(agreementMap.keySet());
+        List<FoodCategory> preferredFoodCategories = getPreferredFoodCategories(request.preferredFoodCategoryIds());
 
         User user = AuthConverter.toUser(request, passwordEncoder.encode(request.password()));
         User savedUser = userRepository.save(user);
 
-        List<UserFoodCategory> userFoodCategories = request.preferredFoods().stream()
-                .distinct()
-                .map(foodName -> {
-                    FoodCategory foodCategory = foodCategoryRepository.findByName(foodName)
-                            .orElseGet(() -> foodCategoryRepository.save(
-                                    FoodCategory.builder()
-                                            .name(foodName)
-                                            .build()
-                            ));
-                    return UserFoodCategory.builder()
-                            .user(savedUser)
-                            .foodCategory(foodCategory)
-                            .build();
-                })
+        List<UserFoodCategory> userFoodCategories = preferredFoodCategories.stream()
+                .map(foodCategory -> UserFoodCategory.builder()
+                        .user(savedUser)
+                        .foodCategory(foodCategory)
+                        .build())
                 .toList();
 
         userFoodCategoryRepository.saveAll(userFoodCategories);
@@ -98,6 +90,17 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return terms;
+    }
+
+    private List<FoodCategory> getPreferredFoodCategories(List<Long> foodCategoryIds) {
+        Set<Long> uniqueFoodCategoryIds = Set.copyOf(foodCategoryIds);
+        List<FoodCategory> foodCategories = foodCategoryRepository.findAllById(uniqueFoodCategoryIds);
+
+        if (foodCategories.size() != uniqueFoodCategoryIds.size()) {
+            throw new AuthException(AuthErrorCode.FOOD_CATEGORY_NOT_FOUND);
+        }
+
+        return foodCategories;
     }
 
     private void saveUserAgreements(User user, List<Term> terms, Map<Long, Boolean> agreementMap) {
