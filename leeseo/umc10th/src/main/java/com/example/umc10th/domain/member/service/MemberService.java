@@ -26,6 +26,12 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final FoodRepository foodRepository;
 
+    public MemberResDto.Profile getMyProfile(Member member) {
+        Member memberWithFood = memberRepository.findMemberWithFoods(member.getId())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+        return MemberConverter.toProfile(memberWithFood);
+    }
+
     public MemberResDto.Profile getProfile(Long id) {
         Member memberWithFood = memberRepository.findMemberWithFoods(id)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));

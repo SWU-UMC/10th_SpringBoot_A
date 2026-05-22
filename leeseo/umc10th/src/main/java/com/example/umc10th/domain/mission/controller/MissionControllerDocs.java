@@ -4,7 +4,9 @@ import com.example.umc10th.domain.mission.dto.*;
 import com.example.umc10th.domain.mission.enums.Address;
 import com.example.umc10th.domain.mission.enums.Status;
 import com.example.umc10th.global.apiPayload.ApiResponse;
+import com.example.umc10th.global.security.entity.AuthMember;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -16,7 +18,7 @@ public interface MissionControllerDocs {
     )
     public ApiResponse<Achievement> getMissionAchievement(
             @RequestParam Address location,
-            @RequestParam Long memberId
+            @AuthenticationPrincipal AuthMember member
     );
 
     @Operation(
@@ -36,7 +38,7 @@ public interface MissionControllerDocs {
     )
     public ApiResponse<Void> saveMemberMission(
             @PathVariable Long missionId,
-            @RequestParam Long memberId
+            @AuthenticationPrincipal AuthMember member
     );
 
     @Operation(
@@ -45,7 +47,7 @@ public interface MissionControllerDocs {
     )
     public ApiResponse<MissionResDto.Pagination<MemberMissionInfo>> getMyMissions(
             @RequestParam Status status,
-            @RequestParam Long memberId,
+            @AuthenticationPrincipal AuthMember member,
             @RequestParam Integer pageSize,
             @RequestParam Integer pageNumber,
             @RequestParam (required = false) String sort
