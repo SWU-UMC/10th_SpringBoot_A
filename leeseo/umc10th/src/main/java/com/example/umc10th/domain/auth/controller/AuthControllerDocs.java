@@ -16,4 +16,12 @@ public interface AuthControllerDocs {
     public ApiResponse<AuthResDto.Id> signUp(
             @RequestBody @Valid AuthReqDto.Signup dto
     );
+
+    @Operation(
+            summary = "이메일 로그인",
+            description = "이메일 로그인 진행"
+    )
+    public ApiResponse<AuthResDto.AccessToken> login(
+            @RequestBody @Valid AuthReqDto.Login dto
+    );
 }

@@ -1,6 +1,7 @@
 package com.example.umc10th.domain.auth.converter;
 
 import com.example.umc10th.domain.auth.dto.AuthReqDto;
+import com.example.umc10th.domain.auth.dto.AuthResDto;
 import com.example.umc10th.domain.member.entity.Member;
 import com.example.umc10th.domain.member.enums.SocialType;
 
@@ -23,6 +24,14 @@ public class AuthConverter {
                 .fullAddress(dto.fullAddress())
                 .socialId("email"+UUID.randomUUID())
                 .socialType(SocialType.EMAIL)
+                .build();
+    }
+
+    public static AuthResDto.AccessToken toAccessToken(
+        String accessToken
+    ) {
+        return AuthResDto.AccessToken.builder()
+                .accessToken(accessToken)
                 .build();
     }
 }
