@@ -5,7 +5,9 @@ import com.example.umc10th.domain.review.dto.ReviewPhotoUrl;
 import com.example.umc10th.domain.review.dto.ReviewReqDto;
 import com.example.umc10th.domain.review.dto.ReviewResDto;
 import com.example.umc10th.global.apiPayload.ApiResponse;
+import com.example.umc10th.global.security.entity.AuthMember;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +23,7 @@ public interface ReviewControllerDocs {
     public ApiResponse<Void> saveReview(
             @PathVariable Long storeId,
             @RequestBody ReviewReqDto.Review dto,
-            @RequestParam Long memberId
+            @AuthenticationPrincipal AuthMember member
     );
 
     @Operation(
