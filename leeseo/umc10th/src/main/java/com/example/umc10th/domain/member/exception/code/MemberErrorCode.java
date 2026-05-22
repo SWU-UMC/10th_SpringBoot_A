@@ -14,7 +14,11 @@ public enum MemberErrorCode implements BaseErrorCode {
 
     BAD_MEMBER_INFO(HttpStatus.BAD_REQUEST,
             "MEMBER400_1",
-            "해당 정보를 저장할 수 없습니다.");
+            "해당 정보를 저장할 수 없습니다."),
+
+    NOT_SUPPORT_SOCIAL_PROVIDER(HttpStatus.BAD_REQUEST,
+            "MEMBER400_2",
+            "허용하지 않는 소셜 타입입니다.");
 
     private final HttpStatus status;
     private final String code;

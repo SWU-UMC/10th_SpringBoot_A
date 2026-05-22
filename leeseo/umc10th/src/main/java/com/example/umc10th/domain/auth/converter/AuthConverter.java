@@ -4,6 +4,7 @@ import com.example.umc10th.domain.auth.dto.AuthReqDto;
 import com.example.umc10th.domain.auth.dto.AuthResDto;
 import com.example.umc10th.domain.member.entity.Member;
 import com.example.umc10th.domain.member.enums.SocialType;
+import com.example.umc10th.global.security.dto.OAuthDto;
 
 import java.util.UUID;
 
@@ -24,6 +25,17 @@ public class AuthConverter {
                 .fullAddress(dto.fullAddress())
                 .socialId("email"+UUID.randomUUID())
                 .socialType(SocialType.EMAIL)
+                .build();
+    }
+
+    public static Member toSocialMember(
+            OAuthDto dto
+    ) {
+        return Member.builder()
+                .email(dto.getSocialEmail())
+                .nickname(dto.getName())
+                .socialId(dto.getSocialUid())
+                .socialType(dto.getSocialType())
                 .build();
     }
 
