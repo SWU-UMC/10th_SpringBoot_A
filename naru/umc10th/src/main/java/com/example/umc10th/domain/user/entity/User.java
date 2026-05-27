@@ -26,6 +26,9 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 255)
     private String email;
 
+    @Column(length = 255)
+    private String password;
+
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(20)")
     private SocialType socialType;
