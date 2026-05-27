@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum MemberErrorCode implements BaseErrorCode {
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER404", "User not found.");
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER404", "User not found."),
+    EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "MEMBER4001", "Email already exists."),
+    FOOD_CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4002", "Food category not found.");
 
     private final HttpStatus httpStatus;
     private final String code;

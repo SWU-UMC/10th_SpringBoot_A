@@ -20,6 +20,14 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @PostMapping("/signup")
+    public ResponseEntity<ApiResponse<MemberResDto.SignUpResponse>> signUp(
+            @Valid @RequestBody MemberReqDto.SignUpRequest request
+    ) {
+        MemberResDto.SignUpResponse result = memberService.signUp(request);
+        return ResponseEntity.ok(ApiResponse.of(MemberSuccessCode.SIGN_UP_SUCCESS, result));
+    }
+
     @PostMapping("/me")
     public ResponseEntity<ApiResponse<MemberResDto.GetMyPageResponse>> getMyPage(
             @Valid @RequestBody MemberReqDto.GetMyPageRequest request

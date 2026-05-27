@@ -53,6 +53,12 @@ public class Member {
     @Column(name = "nickname", nullable = false, length = 20)
     private String nickname;
 
+    @Column(name = "email", unique = true, length = 100)
+    private String email;
+
+    @Column(name = "password", length = 255)
+    private String password;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 

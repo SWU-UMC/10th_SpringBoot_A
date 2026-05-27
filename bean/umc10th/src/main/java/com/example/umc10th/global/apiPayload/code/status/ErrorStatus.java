@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 public enum ErrorStatus implements BaseErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "Server error."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON400", "Bad request."),
-    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "COMMON4001", "Validation failed.");
+    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "COMMON4001", "Validation failed."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "Authentication is required."),
+    FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "Access is denied.");
 
     private final HttpStatus httpStatus;
     private final String code;
