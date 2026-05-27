@@ -1,14 +1,10 @@
 package com.example.umc10th.domain.mission.controller;
 
-import com.example.umc10th.domain.mission.dto.Achievement;
-import com.example.umc10th.domain.mission.dto.MemberMissionInfo;
-import com.example.umc10th.domain.mission.dto.MissionInfo;
-import com.example.umc10th.domain.mission.dto.OwnerNumber;
+import com.example.umc10th.domain.mission.dto.*;
 import com.example.umc10th.domain.mission.enums.Address;
 import com.example.umc10th.domain.mission.enums.Status;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,9 +23,11 @@ public interface MissionControllerDocs {
             summary = "지역별 미션 조회",
             description = "해당 지역의 미션 목록을 조회합니다."
     )
-    public ApiResponse<Slice<MissionInfo>> getMissionList(
+    public ApiResponse<MissionResDto.Pagination<MissionInfo>> getMissionList(
             @RequestParam Address location,
-            @RequestParam Long cursor
+            @RequestParam Integer pageSize,
+            @RequestParam Integer pageNumber,
+            @RequestParam (required = false) String sort
     );
 
     @Operation(
@@ -45,10 +43,12 @@ public interface MissionControllerDocs {
             summary = "진행중/진행완료 미션 조회",
             description = "내 미션 목록을 진행 상태별로 조회합니다."
     )
-    public ApiResponse<Slice<MemberMissionInfo>> getMyMissions(
+    public ApiResponse<MissionResDto.Pagination<MemberMissionInfo>> getMyMissions(
             @RequestParam Status status,
-            @RequestParam Long missionId,
-            @RequestParam Long cursor
+            @RequestParam Long memberId,
+            @RequestParam Integer pageSize,
+            @RequestParam Integer pageNumber,
+            @RequestParam (required = false) String sort
     );
 
     @Operation(

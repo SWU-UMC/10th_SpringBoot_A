@@ -7,6 +7,7 @@ import com.example.umc10th.domain.member.exception.code.MemberSuccessCode;
 import com.example.umc10th.domain.member.service.MemberService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class MemberController implements MemberControllerDocs{
 
     @PatchMapping("/me/profile")
     public ApiResponse<Void> updateProfile(
-            @RequestBody MemberReqDto.Profile dto
+            @RequestBody @Valid MemberReqDto.Profile dto
     ) {
         memberService.updateProfile(dto);
         return ApiResponse.onSuccess(MemberSuccessCode.PROFILE_PATCH_OK, null);
@@ -44,7 +45,7 @@ public class MemberController implements MemberControllerDocs{
 
     @PatchMapping("/me/nickname")
     public ApiResponse<Void> updateNickname(
-            @RequestBody MemberReqDto.Nickname dto
+            @RequestBody @Valid MemberReqDto.Nickname dto
     ) {
         memberService.updateNickname(dto);
         return ApiResponse.onSuccess(MemberSuccessCode.NICKNAME_PATCH_OK, null);

@@ -1,15 +1,13 @@
 package com.example.umc10th.domain.mission.controller;
 
-import com.example.umc10th.domain.mission.dto.Achievement;
-import com.example.umc10th.domain.mission.dto.MemberMissionInfo;
-import com.example.umc10th.domain.mission.dto.MissionInfo;
-import com.example.umc10th.domain.mission.dto.OwnerNumber;
+import com.example.umc10th.domain.mission.dto.*;
 import com.example.umc10th.domain.mission.enums.Address;
 import com.example.umc10th.domain.mission.enums.Status;
 import com.example.umc10th.domain.mission.exception.code.MissionSuccessCode;
 import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
@@ -32,11 +30,13 @@ public class MissionController implements MissionControllerDocs{
     }
 
     @GetMapping("/missions")
-    public ApiResponse<Slice<MissionInfo>> getMissionList(
+    public ApiResponse<MissionResDto.Pagination<MissionInfo>> getMissionList(
             @RequestParam Address location,
-            @RequestParam Long cursor
+            @RequestParam Integer pageSize,
+            @RequestParam Integer pageNumber,
+            @RequestParam (required = false) String sort
     ) {
-        Slice<MissionInfo> response = missionService.getMissionList(location, cursor);
+        MissionResDto.Pagination<MissionInfo> response = missionService.getMissionList(location, pageSize, pageNumber, sort);
         return ApiResponse.onSuccess(MissionSuccessCode.MISSION_LIST_GET_OK, response);
     }
 
@@ -50,12 +50,14 @@ public class MissionController implements MissionControllerDocs{
     }
 
     @GetMapping("/members/me/missions")
-    public ApiResponse<Slice<MemberMissionInfo>> getMyMissions(
+    public ApiResponse<MissionResDto.Pagination<MemberMissionInfo>> getMyMissions(
             @RequestParam Status status,
             @RequestParam Long memberId,
-            @RequestParam Long cursor
+            @RequestParam Integer pageSize,
+            @RequestParam Integer pageNumber,
+            @RequestParam (required = false) String sort
     ) {
-        Slice<MemberMissionInfo> response = missionService.getMyMissionList(status, memberId, cursor);
+        MissionResDto.Pagination<MemberMissionInfo> response = missionService.getMyMissionList(status, memberId, pageSize, pageNumber, sort);
         return ApiResponse.onSuccess(MissionSuccessCode.MY_MISSION_LIST_GET_OK, response);
     }
 

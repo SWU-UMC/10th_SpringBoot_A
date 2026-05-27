@@ -4,7 +4,7 @@ import com.example.umc10th.domain.member.dto.MemberReqDto;
 import com.example.umc10th.domain.member.dto.MemberResDto;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.web.bind.annotation.PatchMapping;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -31,15 +31,14 @@ public interface MemberControllerDocs {
             description = "회원 프로필 정보를 저장합니다."
     )
     public ApiResponse<Void> updateProfile(
-            @RequestBody MemberReqDto.Profile dto
+            @RequestBody @Valid  MemberReqDto.Profile dto
     );
 
     @Operation(
             summary = "닉네임 수정",
             description = "닉네임을 수정합니다."
     )
-    @PatchMapping("/me/nickname")
     public ApiResponse<Void> updateNickname(
-            @RequestBody MemberReqDto.Nickname dto
+            @RequestBody @Valid  MemberReqDto.Nickname dto
     );
 }
