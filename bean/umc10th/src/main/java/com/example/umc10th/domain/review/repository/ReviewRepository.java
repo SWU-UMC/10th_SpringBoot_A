@@ -1,8 +1,8 @@
 package com.example.umc10th.domain.review.repository;
 
 import com.example.umc10th.domain.review.entity.Review;
-import java.util.List;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +17,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             where r.member.id = :memberId
             order by r.id desc
             """)
-    List<Review> findMyReviewsByIdCursorFirst(
+    Slice<Review> findMyReviewsByIdCursorFirst(
             @Param("memberId") Long memberId,
             Pageable pageable
     );
@@ -30,7 +30,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
               and r.id < :cursorId
             order by r.id desc
             """)
-    List<Review> findMyReviewsByIdCursorNext(
+    Slice<Review> findMyReviewsByIdCursorNext(
             @Param("memberId") Long memberId,
             @Param("cursorId") Long cursorId,
             Pageable pageable
@@ -43,7 +43,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             where r.member.id = :memberId
             order by r.score desc, r.id desc
             """)
-    List<Review> findMyReviewsByScoreCursorFirst(
+    Slice<Review> findMyReviewsByScoreCursorFirst(
             @Param("memberId") Long memberId,
             Pageable pageable
     );
@@ -56,7 +56,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
               and (r.score < :cursorScore or (r.score = :cursorScore and r.id < :cursorId))
             order by r.score desc, r.id desc
             """)
-    List<Review> findMyReviewsByScoreCursorNext(
+    Slice<Review> findMyReviewsByScoreCursorNext(
             @Param("memberId") Long memberId,
             @Param("cursorScore") Float cursorScore,
             @Param("cursorId") Long cursorId,

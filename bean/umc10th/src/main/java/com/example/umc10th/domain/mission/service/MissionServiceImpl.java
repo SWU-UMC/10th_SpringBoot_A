@@ -84,7 +84,7 @@ public class MissionServiceImpl implements MissionService {
     public MissionResDto.MissionPageResponse<MissionResDto.MemberMissionPageItem> getMyChallengingMissions(
             MissionReqDto.MyChallengingMissionsRequest request
     ) {
-        int pageNumber = request.page() - 1;
+        int pageNumber = Math.max(request.page(), 1) - 1;
         PageRequest pageRequest = PageRequest.of(pageNumber, request.size());
 
         Slice<MemberMission> memberMissionSlice = memberMissionRepository.findMemberMissionsByStatus(
