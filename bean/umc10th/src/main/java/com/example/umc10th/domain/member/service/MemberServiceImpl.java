@@ -68,6 +68,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public MemberResDto.SignUpResponse signUp(MemberReqDto.SignUpRequest request) {
+        validateRequiredTerms(request.termsAgreement());
+
         if (memberRepository.existsByEmail(request.email())) {
             throw new MemberException(MemberErrorCode.EMAIL_ALREADY_EXISTS);
         }
@@ -107,5 +109,16 @@ public class MemberServiceImpl implements MemberService {
 
         JwtTokenProvider.TokenInfo tokenInfo = jwtTokenProvider.generateAccessToken(member);
         return MemberConverter.toLoginResponse(member, tokenInfo);
+    }
+
+    private void validateRequiredTerms(MemberReqDto.TermsAgreement termsAgreement) {
+        boolean requiredTermsAgreed = termsAgreement != null
+                && Boolean.TRUE.equals(termsAgreement.ageOver14Agreed())
+                && Boolean.TRUE.equals(termsAgreement.serviceTermsAgreed())
+                && Boolean.TRUE.equals(termsAgreement.privacyPolicyAgreed());
+
+        if (!requiredTermsAgreed) {
+            throw new MemberException(MemberErrorCode.REQUIRED_TERMS_NOT_AGREED);
+        }
     }
 }

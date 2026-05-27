@@ -31,6 +31,11 @@ public final class MemberConverter {
                 .nickname(request.nickname())
                 .email(request.email())
                 .password(encodedPassword)
+                .ageOver14Agreed(Boolean.TRUE.equals(request.termsAgreement().ageOver14Agreed()))
+                .serviceTermsAgreed(Boolean.TRUE.equals(request.termsAgreement().serviceTermsAgreed()))
+                .privacyPolicyAgreed(Boolean.TRUE.equals(request.termsAgreement().privacyPolicyAgreed()))
+                .locationAgreed(Boolean.TRUE.equals(request.termsAgreement().locationAgreed()))
+                .marketingAgreed(Boolean.TRUE.equals(request.termsAgreement().marketingAgreed()))
                 .build();
     }
 
