@@ -4,6 +4,7 @@ import com.example.umc10th.domain.member.dto.MemberReqDto;
 import com.example.umc10th.domain.member.dto.MemberResDto;
 import com.example.umc10th.domain.member.entity.Member;
 import com.example.umc10th.domain.store.entity.FoodCategory;
+import com.example.umc10th.global.security.jwt.JwtTokenProvider;
 import java.util.List;
 
 public final class MemberConverter {
@@ -47,14 +48,18 @@ public final class MemberConverter {
     public static MemberResDto.GetMyPageResponse toMyPageResponse(Member member, Integer point) {
         return new MemberResDto.GetMyPageResponse(
                 member.getName(),
-                null,
+                "",
                 member.getEmail(),
                 null,
-                point
+                point == null ? 0 : point
         );
     }
 
-    public static MemberResDto.SignUpResponse toSignUpResponse(Member member, List<FoodCategory> categories) {
+    public static MemberResDto.SignUpResponse toSignUpResponse(
+            Member member,
+            List<FoodCategory> categories,
+            JwtTokenProvider.TokenInfo tokenInfo
+    ) {
         List<Long> preferCategoryIds = categories.stream()
                 .map(FoodCategory::getId)
                 .toList();
@@ -63,7 +68,24 @@ public final class MemberConverter {
                 member.getId(),
                 member.getEmail(),
                 member.getNickname(),
-                preferCategoryIds
+                preferCategoryIds,
+                tokenInfo.accessToken(),
+                tokenInfo.tokenType(),
+                tokenInfo.expiresIn()
+        );
+    }
+
+    public static MemberResDto.LoginResponse toLoginResponse(
+            Member member,
+            JwtTokenProvider.TokenInfo tokenInfo
+    ) {
+        return new MemberResDto.LoginResponse(
+                member.getId(),
+                member.getEmail(),
+                member.getNickname(),
+                tokenInfo.accessToken(),
+                tokenInfo.tokenType(),
+                tokenInfo.expiresIn()
         );
     }
 }

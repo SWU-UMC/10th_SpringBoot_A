@@ -37,4 +37,10 @@ public class MemberReqDto {
             @NotEmpty List<@NotNull @Positive Long> preferCategoryIds
     ) {
     }
+
+    public record LoginRequest(
+            @NotBlank @Email @Size(max = 100) String email,
+            @NotBlank String password
+    ) {
+    }
 }

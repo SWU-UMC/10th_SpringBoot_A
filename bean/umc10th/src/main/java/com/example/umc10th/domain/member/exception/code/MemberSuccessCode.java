@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum MemberSuccessCode implements BaseSuccessCode {
     SIGN_UP_SUCCESS(HttpStatus.OK, "MEMBER2000", "Sign-up completed successfully."),
+    LOGIN_SUCCESS(HttpStatus.OK, "MEMBER2002", "Login completed successfully."),
     GET_MY_PAGE_SUCCESS(HttpStatus.OK, "MEMBER2001", "Successfully retrieved user information.");
 
     private final HttpStatus httpStatus;

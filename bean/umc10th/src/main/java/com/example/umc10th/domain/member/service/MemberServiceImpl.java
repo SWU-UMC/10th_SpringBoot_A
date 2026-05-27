@@ -13,6 +13,7 @@ import com.example.umc10th.domain.mission.enums.MemberMissionStatus;
 import com.example.umc10th.domain.mission.repository.MemberMissionRepository;
 import com.example.umc10th.domain.store.entity.FoodCategory;
 import com.example.umc10th.domain.store.repository.FoodCategoryRepository;
+import com.example.umc10th.global.security.jwt.JwtTokenProvider;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +30,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberPreferRepository memberPreferRepository;
     private final FoodCategoryRepository foodCategoryRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public MemberResDto.MemberInfo getMember(Long memberId) {
@@ -50,8 +52,13 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
+        return getMyPage(member);
+    }
+
+    @Override
+    public MemberResDto.GetMyPageResponse getMyPage(Member member) {
         Integer totalPoint = memberMissionRepository.sumRewardPointByMemberIdAndStatus(
-                memberId,
+                member.getId(),
                 MemberMissionStatus.COMPLETE
         );
 
@@ -85,6 +92,20 @@ public class MemberServiceImpl implements MemberService {
                 .toList();
         memberPreferRepository.saveAll(memberPrefers);
 
-        return MemberConverter.toSignUpResponse(member, categories);
+        JwtTokenProvider.TokenInfo tokenInfo = jwtTokenProvider.generateAccessToken(member);
+        return MemberConverter.toSignUpResponse(member, categories, tokenInfo);
+    }
+
+    @Override
+    public MemberResDto.LoginResponse login(MemberReqDto.LoginRequest request) {
+        Member member = memberRepository.findByEmail(request.email())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        if (!passwordEncoder.matches(request.password(), member.getPassword())) {
+            throw new MemberException(MemberErrorCode.INVALID_PASSWORD);
+        }
+
+        JwtTokenProvider.TokenInfo tokenInfo = jwtTokenProvider.generateAccessToken(member);
+        return MemberConverter.toLoginResponse(member, tokenInfo);
     }
 }
