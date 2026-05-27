@@ -7,6 +7,8 @@ import com.example.umc10th.domain.member.entity.Member;
 import com.example.umc10th.domain.member.exception.MemberException;
 import com.example.umc10th.domain.member.exception.code.MemberErrorCode;
 import com.example.umc10th.domain.member.repository.MemberRepository;
+import com.example.umc10th.domain.mission.enums.MemberMissionStatus;
+import com.example.umc10th.domain.mission.repository.MemberMissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberMissionRepository memberMissionRepository;
 
     @Override
     public MemberResDto.MemberInfo getMember(Long memberId) {
@@ -31,5 +34,18 @@ public class MemberServiceImpl implements MemberService {
     public MemberResDto.MemberInfo createMember(MemberReqDto.Create request) {
         Member savedMember = memberRepository.save(MemberConverter.toEntity(request));
         return MemberConverter.toMemberInfo(savedMember);
+    }
+
+    @Override
+    public MemberResDto.GetMyPageResponse getMyPage(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        Integer totalPoint = memberMissionRepository.sumRewardPointByMemberIdAndStatus(
+                memberId,
+                MemberMissionStatus.COMPLETE
+        );
+
+        return MemberConverter.toMyPageResponse(member, totalPoint);
     }
 }
