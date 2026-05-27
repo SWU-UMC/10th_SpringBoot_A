@@ -6,11 +6,13 @@ import com.example.umc10th.domain.mission.dto.MissionResDto;
 import com.example.umc10th.domain.mission.entity.MemberMission;
 import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.domain.mission.enums.MemberMissionStatus;
-import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.domain.mission.exception.MissionException;
 import com.example.umc10th.domain.mission.exception.code.MissionErrorCode;
 import com.example.umc10th.domain.mission.repository.MemberMissionRepository;
 import com.example.umc10th.domain.mission.repository.MissionRepository;
+import com.example.umc10th.domain.store.entity.Store;
+import com.example.umc10th.domain.store.exception.StoreException;
+import com.example.umc10th.domain.store.exception.code.StoreErrorCode;
 import com.example.umc10th.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,7 +41,7 @@ public class MissionServiceImpl implements MissionService {
     @Transactional
     public MissionResDto.MissionInfo createMission(MissionReqDto.Create request) {
         Store store = storeRepository.findById(request.storeId())
-                .orElseThrow(() -> new MissionException(MissionErrorCode.STORE_NOT_FOUND));
+                .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
 
         Mission savedMission = missionRepository.save(MissionConverter.toEntity(request, store));
         return MissionConverter.toMissionInfo(savedMission);

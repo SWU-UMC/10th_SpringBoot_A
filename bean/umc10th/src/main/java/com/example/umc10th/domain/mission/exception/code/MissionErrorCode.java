@@ -9,8 +9,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum MissionErrorCode implements BaseErrorCode {
-    MISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "MISSION404", "Mission not found."),
-    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE404", "Store not found.");
+    MISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "MISSION404_1", "Mission not found.");
 
     private final HttpStatus httpStatus;
     private final String code;

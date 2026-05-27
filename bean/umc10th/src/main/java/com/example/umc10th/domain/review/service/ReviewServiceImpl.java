@@ -1,9 +1,9 @@
 package com.example.umc10th.domain.review.service;
 
 import com.example.umc10th.domain.member.entity.Member;
+import com.example.umc10th.domain.member.exception.MemberException;
+import com.example.umc10th.domain.member.exception.code.MemberErrorCode;
 import com.example.umc10th.domain.member.repository.MemberRepository;
-import com.example.umc10th.domain.store.entity.Store;
-import com.example.umc10th.domain.store.repository.StoreRepository;
 import com.example.umc10th.domain.review.converter.ReviewConverter;
 import com.example.umc10th.domain.review.dto.ReviewReqDto;
 import com.example.umc10th.domain.review.dto.ReviewResDto;
@@ -11,6 +11,10 @@ import com.example.umc10th.domain.review.entity.Review;
 import com.example.umc10th.domain.review.exception.ReviewException;
 import com.example.umc10th.domain.review.exception.code.ReviewErrorCode;
 import com.example.umc10th.domain.review.repository.ReviewRepository;
+import com.example.umc10th.domain.store.entity.Store;
+import com.example.umc10th.domain.store.exception.StoreException;
+import com.example.umc10th.domain.store.exception.code.StoreErrorCode;
+import com.example.umc10th.domain.store.repository.StoreRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -38,10 +42,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public ReviewResDto.ReviewInfo createReview(ReviewReqDto.Create request) {
         Member member = memberRepository.findById(request.memberId())
-                .orElseThrow(() -> new ReviewException(ReviewErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Store store = storeRepository.findById(request.storeId())
-                .orElseThrow(() -> new ReviewException(ReviewErrorCode.STORE_NOT_FOUND));
+                .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
 
         Review savedReview = reviewRepository.save(ReviewConverter.toEntity(request, member, store));
         return ReviewConverter.toReviewInfo(savedReview);
@@ -50,7 +54,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResDto.MyReviewsByIdCursorResponse getMyReviewsByIdCursor(ReviewReqDto.MyReviewsByIdCursorRequest request) {
         memberRepository.findById(request.memberId())
-                .orElseThrow(() -> new ReviewException(ReviewErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         int fetchSize = request.size() + 1;
         PageRequest pageRequest = PageRequest.of(0, fetchSize);
@@ -73,7 +77,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResDto.MyReviewsByScoreCursorResponse getMyReviewsByScoreCursor(ReviewReqDto.MyReviewsByScoreCursorRequest request) {
         memberRepository.findById(request.memberId())
-                .orElseThrow(() -> new ReviewException(ReviewErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         boolean bothCursorProvided = request.cursorScore() != null && request.cursorId() != null;
         boolean bothCursorEmpty = request.cursorScore() == null && request.cursorId() == null;
