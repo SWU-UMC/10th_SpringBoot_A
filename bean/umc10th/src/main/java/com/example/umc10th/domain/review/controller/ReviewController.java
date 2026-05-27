@@ -30,4 +30,18 @@ public class ReviewController {
     public ResponseEntity<ApiResponse<ReviewResDto.ReviewInfo>> createReview(@Valid @RequestBody ReviewReqDto.Create request) {
         return ResponseEntity.ok(ApiResponse.onSuccess(reviewService.createReview(request)));
     }
+
+    @PostMapping("/my/id-cursor")
+    public ResponseEntity<ApiResponse<ReviewResDto.MyReviewsByIdCursorResponse>> getMyReviewsByIdCursor(
+            @Valid @RequestBody ReviewReqDto.MyReviewsByIdCursorRequest request
+    ) {
+        return ResponseEntity.ok(ApiResponse.onSuccess(reviewService.getMyReviewsByIdCursor(request)));
+    }
+
+    @PostMapping("/my/score-cursor")
+    public ResponseEntity<ApiResponse<ReviewResDto.MyReviewsByScoreCursorResponse>> getMyReviewsByScoreCursor(
+            @Valid @RequestBody ReviewReqDto.MyReviewsByScoreCursorRequest request
+    ) {
+        return ResponseEntity.ok(ApiResponse.onSuccess(reviewService.getMyReviewsByScoreCursor(request)));
+    }
 }

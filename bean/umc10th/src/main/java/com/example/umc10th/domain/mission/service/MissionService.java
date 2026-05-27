@@ -12,4 +12,6 @@ public interface MissionService {
     MissionResDto.MemberMissionPageResponse getMemberMissions(Long memberId, MemberMissionStatus status, Integer page);
 
     MissionResDto.HomeMissionPageResponse getHomeMissions(Long regionId, Long memberId, Integer page);
+
+    MissionResDto.MemberMissionPageResponse getMyChallengingMissions(MissionReqDto.MyChallengingMissionsRequest request);
 }

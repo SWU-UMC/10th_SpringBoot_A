@@ -11,7 +11,8 @@ import org.springframework.http.HttpStatus;
 public enum ReviewErrorCode implements BaseErrorCode {
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW404", "Review not found."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER404", "User not found."),
-    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE404", "Store not found.");
+    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE404", "Store not found."),
+    INVALID_CURSOR(HttpStatus.BAD_REQUEST, "REVIEW4001", "Invalid cursor request.");
 
     private final HttpStatus httpStatus;
     private final String code;

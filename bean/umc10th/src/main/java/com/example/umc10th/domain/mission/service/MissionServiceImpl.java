@@ -67,4 +67,18 @@ public class MissionServiceImpl implements MissionService {
         Page<Mission> missionPage = missionRepository.findChallengeableMissionsByRegion(regionId, memberId, pageRequest);
         return MissionConverter.toHomeMissionPageResponse(missionPage);
     }
+
+    @Override
+    public MissionResDto.MemberMissionPageResponse getMyChallengingMissions(MissionReqDto.MyChallengingMissionsRequest request) {
+        int pageNumber = request.page() - 1;
+        PageRequest pageRequest = PageRequest.of(pageNumber, request.size());
+
+        Page<MemberMission> memberMissionPage = memberMissionRepository.findMemberMissionsByStatus(
+                request.memberId(),
+                MemberMissionStatus.CHALLENGING,
+                pageRequest
+        );
+
+        return MissionConverter.toMemberMissionPageResponse(memberMissionPage);
+    }
 }

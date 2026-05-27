@@ -7,4 +7,8 @@ public interface ReviewService {
     ReviewResDto.ReviewInfo getReview(Long reviewId);
 
     ReviewResDto.ReviewInfo createReview(ReviewReqDto.Create request);
+
+    ReviewResDto.MyReviewsByIdCursorResponse getMyReviewsByIdCursor(ReviewReqDto.MyReviewsByIdCursorRequest request);
+
+    ReviewResDto.MyReviewsByScoreCursorResponse getMyReviewsByScoreCursor(ReviewReqDto.MyReviewsByScoreCursorRequest request);
 }
