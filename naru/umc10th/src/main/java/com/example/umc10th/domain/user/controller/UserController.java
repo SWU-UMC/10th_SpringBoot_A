@@ -8,10 +8,12 @@ import com.example.umc10th.domain.user.service.UserService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
+import com.example.umc10th.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,9 +28,9 @@ public class UserController {
     @Operation(summary = "마이페이지 조회 API")
     @GetMapping("/mypage")
     public ApiResponse<UserResponseDto.MyPageResultDto> getMyPage(
-            @RequestParam Long userId
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        UserResponseDto.MyPageResultDto result = userService.getMyPage(userId);
+        UserResponseDto.MyPageResultDto result = userService.getMyPage(userDetails.getUserId());
         return ApiResponse.onSuccess(GeneralSuccessCode.OK, result);
     }
 
