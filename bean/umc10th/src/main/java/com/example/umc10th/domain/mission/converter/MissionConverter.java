@@ -4,9 +4,10 @@ import com.example.umc10th.domain.mission.dto.MissionReqDto;
 import com.example.umc10th.domain.mission.dto.MissionResDto;
 import com.example.umc10th.domain.mission.entity.MemberMission;
 import com.example.umc10th.domain.mission.entity.Mission;
-import org.springframework.data.domain.Page;
 import com.example.umc10th.domain.store.entity.Store;
 import java.util.List;
+import java.util.function.Function;
+import org.springframework.data.domain.Slice;
 
 public final class MissionConverter {
 
@@ -53,35 +54,33 @@ public final class MissionConverter {
         );
     }
 
-    public static MissionResDto.MemberMissionPageResponse toMemberMissionPageResponse(Page<MemberMission> page) {
-        List<MissionResDto.MemberMissionPageItem> missions = page.getContent()
-                .stream()
-                .map(MissionConverter::toMemberMissionPageItem)
-                .toList();
-
-        return new MissionResDto.MemberMissionPageResponse(
-                missions,
-                missions.size(),
-                page.getTotalPages(),
-                page.getTotalElements(),
-                page.isFirst(),
-                page.isLast()
-        );
+    public static MissionResDto.MissionPageResponse<MissionResDto.MemberMissionPageItem> toMemberMissionPageResponse(
+            Slice<MemberMission> slice
+    ) {
+        return toMissionPageResponse(slice, MissionConverter::toMemberMissionPageItem);
     }
 
-    public static MissionResDto.HomeMissionPageResponse toHomeMissionPageResponse(Page<Mission> page) {
-        List<MissionResDto.HomeMissionPageItem> missions = page.getContent()
+    public static MissionResDto.MissionPageResponse<MissionResDto.HomeMissionPageItem> toHomeMissionPageResponse(
+            Slice<Mission> slice
+    ) {
+        return toMissionPageResponse(slice, MissionConverter::toHomeMissionPageItem);
+    }
+
+    private static <T, R> MissionResDto.MissionPageResponse<R> toMissionPageResponse(
+            Slice<T> slice,
+            Function<T, R> mapper
+    ) {
+        List<R> missions = slice.getContent()
                 .stream()
-                .map(MissionConverter::toHomeMissionPageItem)
+                .map(mapper)
                 .toList();
 
-        return new MissionResDto.HomeMissionPageResponse(
+        return new MissionResDto.MissionPageResponse<>(
                 missions,
                 missions.size(),
-                page.getTotalPages(),
-                page.getTotalElements(),
-                page.isFirst(),
-                page.isLast()
+                slice.isFirst(),
+                slice.isLast(),
+                slice.hasNext()
         );
     }
 }

@@ -38,14 +38,14 @@ public class MissionController {
     }
 
     @PostMapping("/my/challenging")
-    public ResponseEntity<ApiResponse<MissionResDto.MemberMissionPageResponse>> getMyChallengingMissions(
+    public ResponseEntity<ApiResponse<MissionResDto.MissionPageResponse<MissionResDto.MemberMissionPageItem>>> getMyChallengingMissions(
             @Valid @RequestBody MissionReqDto.MyChallengingMissionsRequest request
     ) {
         return ResponseEntity.ok(ApiResponse.onSuccess(missionService.getMyChallengingMissions(request)));
     }
 
     @GetMapping("/members/{memberId}")
-    public ResponseEntity<ApiResponse<MissionResDto.MemberMissionPageResponse>> getMemberMissions(
+    public ResponseEntity<ApiResponse<MissionResDto.MissionPageResponse<MissionResDto.MemberMissionPageItem>>> getMemberMissions(
             @PathVariable Long memberId,
             @RequestParam MemberMissionStatus status,
             @RequestParam(defaultValue = "1") @Min(1) Integer page
@@ -54,7 +54,7 @@ public class MissionController {
     }
 
     @GetMapping("/home")
-    public ResponseEntity<ApiResponse<MissionResDto.HomeMissionPageResponse>> getHomeMissions(
+    public ResponseEntity<ApiResponse<MissionResDto.MissionPageResponse<MissionResDto.HomeMissionPageItem>>> getHomeMissions(
             @RequestParam @NotNull Long regionId,
             @RequestParam(required = false) Long memberId,
             @RequestParam(defaultValue = "1") @Min(1) Integer page

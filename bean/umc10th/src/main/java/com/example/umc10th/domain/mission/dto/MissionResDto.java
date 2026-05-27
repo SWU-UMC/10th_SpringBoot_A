@@ -32,23 +32,12 @@ public class MissionResDto {
     ) {
     }
 
-    public record MemberMissionPageResponse(
-            List<MemberMissionPageItem> missions,
+    public record MissionPageResponse<T>(
+            List<T> missions,
             Integer listSize,
-            Integer totalPage,
-            Long totalElements,
             Boolean isFirst,
-            Boolean isLast
-    ) {
-    }
-
-    public record HomeMissionPageResponse(
-            List<HomeMissionPageItem> missions,
-            Integer listSize,
-            Integer totalPage,
-            Long totalElements,
-            Boolean isFirst,
-            Boolean isLast
+            Boolean isLast,
+            Boolean hasNext
     ) {
     }
 }
