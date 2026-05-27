@@ -1,15 +1,10 @@
 package com.example.umc10th.domain.member.exception;
 
 import com.example.umc10th.domain.member.exception.code.MemberErrorCode;
-import lombok.Getter;
+import com.example.umc10th.global.apiPayload.exception.GeneralException;
 
-@Getter
-public class MemberException extends RuntimeException {
-
-    private final MemberErrorCode errorCode;
-
+public class MemberException extends GeneralException {
     public MemberException(MemberErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode;
+        super(errorCode);
     }
 }

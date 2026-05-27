@@ -1,15 +1,10 @@
 package com.example.umc10th.domain.store.exception;
 
 import com.example.umc10th.domain.store.exception.code.StoreErrorCode;
-import lombok.Getter;
+import com.example.umc10th.global.apiPayload.exception.GeneralException;
 
-@Getter
-public class StoreException extends RuntimeException {
-
-    private final StoreErrorCode errorCode;
-
+public class StoreException extends GeneralException {
     public StoreException(StoreErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode;
+        super(errorCode);
     }
 }
