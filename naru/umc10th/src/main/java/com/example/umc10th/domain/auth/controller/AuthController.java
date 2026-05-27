@@ -30,4 +30,13 @@ public class AuthController {
         AuthResponseDto.SignUpResultDto result = authService.signUp(request);
         return ApiResponse.onSuccess(UserSuccessCode.USER_JOIN_SUCCESS, result);
     }
+
+    @Operation(summary = "로그인 API")
+    @PostMapping("/login")
+    public ApiResponse<AuthResponseDto.LoginResultDto> login(
+            @RequestBody @Valid AuthRequestDto.LoginDto request
+    ) {
+        AuthResponseDto.LoginResultDto result = authService.login(request);
+        return ApiResponse.onSuccess(UserSuccessCode.USER_LOGIN_SUCCESS, result);
+    }
 }
