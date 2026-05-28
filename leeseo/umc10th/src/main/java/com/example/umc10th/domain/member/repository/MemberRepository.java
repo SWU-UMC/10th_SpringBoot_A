@@ -15,4 +15,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         where m.id = :id
     """)
     Optional<Member> findMemberWithFoods(Long id);
+    Optional<Member> findByEmail(String email);
 }

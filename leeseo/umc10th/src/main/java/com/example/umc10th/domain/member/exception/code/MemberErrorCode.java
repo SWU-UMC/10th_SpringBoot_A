@@ -10,7 +10,11 @@ import org.springframework.http.HttpStatus;
 public enum MemberErrorCode implements BaseErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND,
             "MEMBER404_1",
-            "해당 아이디의 회원이 존재하지 않습니다.");
+            "해당 아이디의 회원이 존재하지 않습니다."),
+
+    BAD_MEMBER_INFO(HttpStatus.BAD_REQUEST,
+            "MEMBER400_1",
+            "해당 정보를 저장할 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;
