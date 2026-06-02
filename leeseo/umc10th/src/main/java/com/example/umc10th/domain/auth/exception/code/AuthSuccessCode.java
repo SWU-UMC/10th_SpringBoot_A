@@ -11,7 +11,11 @@ public enum AuthSuccessCode implements BaseSuccessCode {
 
     SIGNUP_OK(HttpStatus.OK,
             "AUTH200_1",
-            "회원가입 되었습니다.");
+            "회원가입 되었습니다."),
+
+    LOGIN_OK(HttpStatus.OK,
+            "AUTH200_2",
+            "로그인 되었습니다.");
 
     private final HttpStatus status;
     private final String code;

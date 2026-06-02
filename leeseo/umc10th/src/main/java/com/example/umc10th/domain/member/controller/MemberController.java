@@ -2,18 +2,19 @@ package com.example.umc10th.domain.member.controller;
 
 import com.example.umc10th.domain.member.dto.MemberReqDto;
 import com.example.umc10th.domain.member.dto.MemberResDto;
-import com.example.umc10th.domain.member.exception.code.MemberErrorCode;
 import com.example.umc10th.domain.member.exception.code.MemberSuccessCode;
 import com.example.umc10th.domain.member.service.MemberService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
+import com.example.umc10th.global.security.entity.AuthMember;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/vi/members")
+@RequestMapping("/api/v1/members")
 @Tag(name = "Member", description = "회원 관련 API")
 public class MemberController implements MemberControllerDocs{
 
@@ -28,8 +29,16 @@ public class MemberController implements MemberControllerDocs{
     }
 
     @GetMapping("/me/profile")
+    public ApiResponse<MemberResDto.Profile> getMyProfile(
+            @AuthenticationPrincipal AuthMember member
+    ) {
+        MemberResDto.Profile response = memberService.getMyProfile(member.getMember());
+        return ApiResponse.onSuccess(MemberSuccessCode.PROFILE_GET_OK, response);
+    }
+
+    @GetMapping("/{id}/profile")
     public ApiResponse<MemberResDto.Profile> getProfile(
-            @RequestParam Long id
+            @PathVariable Long id
     ) {
         MemberResDto.Profile response = memberService.getProfile(id);
         return ApiResponse.onSuccess(MemberSuccessCode.PROFILE_GET_OK, response);

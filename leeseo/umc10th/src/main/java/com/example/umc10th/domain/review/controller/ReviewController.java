@@ -7,9 +7,11 @@ import com.example.umc10th.domain.review.dto.ReviewResDto;
 import com.example.umc10th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
+import com.example.umc10th.global.security.entity.AuthMember;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,9 +28,9 @@ public class ReviewController implements ReviewControllerDocs{
     public ApiResponse<Void> saveReview(
             @PathVariable Long storeId,
             @RequestBody @Valid ReviewReqDto.Review dto,
-            @RequestParam Long memberId
-    ) {
-        reviewService.saveReview(storeId, memberId, dto);
+            @AuthenticationPrincipal AuthMember member
+            ) {
+        reviewService.saveReview(storeId, member.getMember().getId(), dto);
         return ApiResponse.onSuccess(ReviewSuccessCode.REVIEW_POST_OK, null);
     }
 

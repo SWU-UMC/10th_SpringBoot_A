@@ -17,7 +17,7 @@ public class MemberConverter {
                 .address(member.getAddress())
                 .fullAddress(member.getFullAddress())
                 .gender(member.getGender())
-                .food(member.getMemberFoodList().stream().map(MemberFood::getFood).toList())
+                .food(member.getMemberFoodList().stream().map(mf -> mf.getFood().getName()).toList())
                 .build();
     }
 

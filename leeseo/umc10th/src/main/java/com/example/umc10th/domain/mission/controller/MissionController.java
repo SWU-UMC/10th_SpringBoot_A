@@ -6,10 +6,10 @@ import com.example.umc10th.domain.mission.enums.Status;
 import com.example.umc10th.domain.mission.exception.code.MissionSuccessCode;
 import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
+import com.example.umc10th.global.security.entity.AuthMember;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Slice;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -23,9 +23,9 @@ public class MissionController implements MissionControllerDocs{
     @GetMapping("/missions/achievement-rate")
     public ApiResponse<Achievement> getMissionAchievement(
             @RequestParam Address location,
-            @RequestParam Long memberId
-    ) {
-        Achievement response = missionService.getMissionAchievement(location, memberId);
+            @AuthenticationPrincipal AuthMember member
+            ) {
+        Achievement response = missionService.getMissionAchievement(location, member.getMember().getId());
         return ApiResponse.onSuccess(MissionSuccessCode.ACHIEVEMENT_GET_OK, response);
     }
 
@@ -43,21 +43,21 @@ public class MissionController implements MissionControllerDocs{
     @PostMapping("/members/me/missions/{missionId}")
     public ApiResponse<Void> saveMemberMission(
             @PathVariable Long missionId,
-            @RequestParam Long memberId
+            @AuthenticationPrincipal AuthMember member
     ) {
-        missionService.saveMemberMission(missionId,memberId);
+        missionService.saveMemberMission(missionId,member.getMember().getId());
         return ApiResponse.onSuccess(MissionSuccessCode.MEMBER_MISSION_POST_OK,null);
     }
 
     @GetMapping("/members/me/missions")
     public ApiResponse<MissionResDto.Pagination<MemberMissionInfo>> getMyMissions(
             @RequestParam Status status,
-            @RequestParam Long memberId,
+            @AuthenticationPrincipal AuthMember member,
             @RequestParam Integer pageSize,
             @RequestParam Integer pageNumber,
             @RequestParam (required = false) String sort
     ) {
-        MissionResDto.Pagination<MemberMissionInfo> response = missionService.getMyMissionList(status, memberId, pageSize, pageNumber, sort);
+        MissionResDto.Pagination<MemberMissionInfo> response = missionService.getMyMissionList(status, member.getMember().getId(), pageSize, pageNumber, sort);
         return ApiResponse.onSuccess(MissionSuccessCode.MY_MISSION_LIST_GET_OK, response);
     }
 

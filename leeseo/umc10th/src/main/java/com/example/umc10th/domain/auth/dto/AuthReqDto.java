@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,5 +34,14 @@ public class AuthReqDto {
             String fullAddress,
             @NotNull
             List<FoodType> food
+    ) {}
+
+    @Schema(name = "Login", description = "로그인 정보를 저장합니다.")
+    public record Login (
+            @Email
+            @NotBlank
+            String email,
+            @NotBlank
+            String password
     ) {}
 }

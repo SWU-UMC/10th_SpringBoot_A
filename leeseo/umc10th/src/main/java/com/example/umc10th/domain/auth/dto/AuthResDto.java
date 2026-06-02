@@ -10,4 +10,9 @@ public class AuthResDto {
     public record Id(
        Long id
     ) {}
+
+    @Builder
+    public record AccessToken(
+            String accessToken
+    ) {}
 }

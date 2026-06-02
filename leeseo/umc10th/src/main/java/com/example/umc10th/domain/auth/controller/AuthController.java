@@ -27,4 +27,11 @@ public class AuthController implements AuthControllerDocs{
     ) {
         return ApiResponse.onSuccess(AuthSuccessCode.SIGNUP_OK, authService.signUp(dto));
     }
+
+    @PostMapping("/login")
+    public ApiResponse<AuthResDto.AccessToken> login(
+            @RequestBody @Valid AuthReqDto.Login dto
+    ) {
+        return ApiResponse.onSuccess(AuthSuccessCode.LOGIN_OK, authService.login(dto));
+    }
 }
