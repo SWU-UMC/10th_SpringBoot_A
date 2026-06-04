@@ -25,10 +25,10 @@ public class SecurityResponseWriter {
         objectMapper.writeValue(response.getWriter(), ApiResponse.onFailure(code, null));
     }
 
-    public void writeSuccess(HttpServletResponse response, BaseSuccessCode code) throws IOException {
+    public <T> void writeSuccess(HttpServletResponse response, BaseSuccessCode code, T result) throws IOException {
         response.setStatus(code.getStatus().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        objectMapper.writeValue(response.getWriter(), ApiResponse.onSuccess(code, null));
+        objectMapper.writeValue(response.getWriter(), ApiResponse.onSuccess(code, result));
     }
 }

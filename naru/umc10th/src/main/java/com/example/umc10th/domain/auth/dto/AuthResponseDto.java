@@ -10,4 +10,12 @@ public class AuthResponseDto {
             String email,
             String name
     ) {}
+
+    @Builder
+    public record LoginResultDto(
+            String grantType,
+            String accessToken,
+            String refreshToken,
+            Long accessTokenExpiresIn
+    ) {}
 }

@@ -17,8 +17,13 @@ import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.domain.user.exception.UserException;
 import com.example.umc10th.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.UserRepository;
+import com.example.umc10th.global.security.jwt.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +42,8 @@ public class AuthServiceImpl implements AuthService {
     private final TermRepository termRepository;
     private final UserAgreementRepository userAgreementRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
     @Override
     @Transactional
@@ -69,6 +76,20 @@ public class AuthServiceImpl implements AuthService {
         userFoodCategoryRepository.saveAll(userFoodCategories);
         saveUserAgreements(savedUser, requestedTerms, agreementMap);
         return AuthConverter.toSignUpResultDto(savedUser);
+    }
+
+    @Override
+    public AuthResponseDto.LoginResultDto login(AuthRequestDto.LoginDto request) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.email(), request.password())
+        );
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return AuthResponseDto.LoginResultDto.builder()
+                .grantType("Bearer")
+                .accessToken(jwtUtil.createAccessToken(userDetails))
+                .refreshToken(jwtUtil.createRefreshToken(userDetails))
+                .accessTokenExpiresIn(jwtUtil.getAccessTokenExpiration())
+                .build();
     }
 
     private void validateRequiredTerms(Map<Long, Boolean> agreementMap) {

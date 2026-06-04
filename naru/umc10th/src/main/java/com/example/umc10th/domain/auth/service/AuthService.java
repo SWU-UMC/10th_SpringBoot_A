@@ -6,4 +6,6 @@ import com.example.umc10th.domain.auth.dto.AuthResponseDto;
 public interface AuthService {
 
     AuthResponseDto.SignUpResultDto signUp(AuthRequestDto.SignUpDto request);
+
+    AuthResponseDto.LoginResultDto login(AuthRequestDto.LoginDto request);
 }
