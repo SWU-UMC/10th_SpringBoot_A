@@ -17,3 +17,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+jwt:
+  secret: ${JWT_SECRET:umc10th-default-dev-secret-key-change-me-please-1234567890}
+  access-token-validity-in-seconds: 3600

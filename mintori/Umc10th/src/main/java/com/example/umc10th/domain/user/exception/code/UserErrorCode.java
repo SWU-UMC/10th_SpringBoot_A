@@ -12,6 +12,7 @@ public enum UserErrorCode implements BaseErrorCode {
     USER_NOT_FOUND("USER_404", "존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND),
     DUPLICATE_EMAIL("USER_409", "이미 가입된 이메일입니다.", HttpStatus.CONFLICT),
     INVALID_USER_REQUEST("USER_400", "유저 요청이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
+    LOGIN_FAILED("USER_401", "이메일 또는 비밀번호가 올바르지 않습니다.", HttpStatus.UNAUTHORIZED),
     ;
 
     private final String code;
