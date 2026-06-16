@@ -29,7 +29,20 @@ public class MemberResDto {
             Long memberId,
             String email,
             String nickname,
-            List<Long> preferCategoryIds
+            List<Long> preferCategoryIds,
+            String accessToken,
+            String tokenType,
+            Long expiresIn
+    ) {
+    }
+
+    public record LoginResponse(
+            Long memberId,
+            String email,
+            String nickname,
+            String accessToken,
+            String tokenType,
+            Long expiresIn
     ) {
     }
 }

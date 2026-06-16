@@ -6,15 +6,17 @@ import com.example.umc10th.domain.mission.dto.MissionResDto;
 import com.example.umc10th.domain.mission.entity.MemberMission;
 import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.domain.mission.enums.MemberMissionStatus;
-import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.domain.mission.exception.MissionException;
 import com.example.umc10th.domain.mission.exception.code.MissionErrorCode;
 import com.example.umc10th.domain.mission.repository.MemberMissionRepository;
 import com.example.umc10th.domain.mission.repository.MissionRepository;
+import com.example.umc10th.domain.store.entity.Store;
+import com.example.umc10th.domain.store.exception.StoreException;
+import com.example.umc10th.domain.store.exception.code.StoreErrorCode;
 import com.example.umc10th.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MissionServiceImpl implements MissionService {
+
+    private static final int DEFAULT_PAGE_SIZE = 10;
 
     private final MissionRepository missionRepository;
     private final MemberMissionRepository memberMissionRepository;
@@ -39,46 +43,56 @@ public class MissionServiceImpl implements MissionService {
     @Transactional
     public MissionResDto.MissionInfo createMission(MissionReqDto.Create request) {
         Store store = storeRepository.findById(request.storeId())
-                .orElseThrow(() -> new MissionException(MissionErrorCode.STORE_NOT_FOUND));
+                .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
 
         Mission savedMission = missionRepository.save(MissionConverter.toEntity(request, store));
         return MissionConverter.toMissionInfo(savedMission);
     }
 
     @Override
-    public MissionResDto.MemberMissionPageResponse getMemberMissions(Long memberId, MemberMissionStatus status, Integer page) {
+    public MissionResDto.MissionPageResponse<MissionResDto.MemberMissionPageItem> getMemberMissions(
+            Long memberId,
+            MemberMissionStatus status,
+            Integer page
+    ) {
         int pageNumber = Math.max(page, 1) - 1;
-        PageRequest pageRequest = PageRequest.of(pageNumber, 10);
+        PageRequest pageRequest = PageRequest.of(pageNumber, DEFAULT_PAGE_SIZE);
 
-        Page<MemberMission> memberMissionPage = memberMissionRepository.findMemberMissionsByStatus(
+        Slice<MemberMission> memberMissionSlice = memberMissionRepository.findMemberMissionsByStatus(
                 memberId,
                 status,
                 pageRequest
         );
 
-        return MissionConverter.toMemberMissionPageResponse(memberMissionPage);
+        return MissionConverter.toMemberMissionPageResponse(memberMissionSlice);
     }
 
     @Override
-    public MissionResDto.HomeMissionPageResponse getHomeMissions(Long regionId, Long memberId, Integer page) {
+    public MissionResDto.MissionPageResponse<MissionResDto.HomeMissionPageItem> getHomeMissions(
+            Long regionId,
+            Long memberId,
+            Integer page
+    ) {
         int pageNumber = Math.max(page, 1) - 1;
-        PageRequest pageRequest = PageRequest.of(pageNumber, 10);
+        PageRequest pageRequest = PageRequest.of(pageNumber, DEFAULT_PAGE_SIZE);
 
-        Page<Mission> missionPage = missionRepository.findChallengeableMissionsByRegion(regionId, memberId, pageRequest);
-        return MissionConverter.toHomeMissionPageResponse(missionPage);
+        Slice<Mission> missionSlice = missionRepository.findChallengeableMissionsByRegion(regionId, memberId, pageRequest);
+        return MissionConverter.toHomeMissionPageResponse(missionSlice);
     }
 
     @Override
-    public MissionResDto.MemberMissionPageResponse getMyChallengingMissions(MissionReqDto.MyChallengingMissionsRequest request) {
-        int pageNumber = request.page() - 1;
+    public MissionResDto.MissionPageResponse<MissionResDto.MemberMissionPageItem> getMyChallengingMissions(
+            MissionReqDto.MyChallengingMissionsRequest request
+    ) {
+        int pageNumber = Math.max(request.page(), 1) - 1;
         PageRequest pageRequest = PageRequest.of(pageNumber, request.size());
 
-        Page<MemberMission> memberMissionPage = memberMissionRepository.findMemberMissionsByStatus(
+        Slice<MemberMission> memberMissionSlice = memberMissionRepository.findMemberMissionsByStatus(
                 request.memberId(),
                 MemberMissionStatus.CHALLENGING,
                 pageRequest
         );
 
-        return MissionConverter.toMemberMissionPageResponse(memberMissionPage);
+        return MissionConverter.toMemberMissionPageResponse(memberMissionSlice);
     }
 }

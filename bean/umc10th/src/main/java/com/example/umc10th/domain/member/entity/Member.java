@@ -59,6 +59,21 @@ public class Member {
     @Column(name = "password", length = 255)
     private String password;
 
+    @Column(name = "age_over_14_agreed", nullable = false)
+    private boolean ageOver14Agreed;
+
+    @Column(name = "service_terms_agreed", nullable = false)
+    private boolean serviceTermsAgreed;
+
+    @Column(name = "privacy_policy_agreed", nullable = false)
+    private boolean privacyPolicyAgreed;
+
+    @Column(name = "location_agreed", nullable = false)
+    private boolean locationAgreed;
+
+    @Column(name = "marketing_agreed", nullable = false)
+    private boolean marketingAgreed;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 

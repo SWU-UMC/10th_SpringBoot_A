@@ -9,9 +9,19 @@ public interface MissionService {
 
     MissionResDto.MissionInfo createMission(MissionReqDto.Create request);
 
-    MissionResDto.MemberMissionPageResponse getMemberMissions(Long memberId, MemberMissionStatus status, Integer page);
+    MissionResDto.MissionPageResponse<MissionResDto.MemberMissionPageItem> getMemberMissions(
+            Long memberId,
+            MemberMissionStatus status,
+            Integer page
+    );
 
-    MissionResDto.HomeMissionPageResponse getHomeMissions(Long regionId, Long memberId, Integer page);
+    MissionResDto.MissionPageResponse<MissionResDto.HomeMissionPageItem> getHomeMissions(
+            Long regionId,
+            Long memberId,
+            Integer page
+    );
 
-    MissionResDto.MemberMissionPageResponse getMyChallengingMissions(MissionReqDto.MyChallengingMissionsRequest request);
+    MissionResDto.MissionPageResponse<MissionResDto.MemberMissionPageItem> getMyChallengingMissions(
+            MissionReqDto.MyChallengingMissionsRequest request
+    );
 }

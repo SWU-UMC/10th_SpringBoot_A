@@ -6,6 +6,7 @@ import com.example.umc10th.domain.review.dto.ReviewReqDto;
 import com.example.umc10th.domain.review.dto.ReviewResDto;
 import com.example.umc10th.domain.review.entity.Review;
 import java.util.List;
+import org.springframework.data.domain.Slice;
 
 public final class ReviewConverter {
 
@@ -42,19 +43,39 @@ public final class ReviewConverter {
     }
 
     public static ReviewResDto.MyReviewsByIdCursorResponse toMyReviewsByIdCursorResponse(
-            List<ReviewResDto.MyReviewItem> reviews,
-            Long nextCursorId,
-            boolean hasNext
+            Slice<Review> slice
     ) {
-        return new ReviewResDto.MyReviewsByIdCursorResponse(reviews, nextCursorId, hasNext);
+        List<Review> reviews = slice.getContent();
+        List<ReviewResDto.MyReviewItem> items = reviews.stream()
+                .map(ReviewConverter::toMyReviewItem)
+                .toList();
+
+        Long nextCursorId = slice.hasNext()
+                ? reviews.get(reviews.size() - 1).getId()
+                : null;
+
+        return new ReviewResDto.MyReviewsByIdCursorResponse(items, nextCursorId, slice.hasNext());
     }
 
     public static ReviewResDto.MyReviewsByScoreCursorResponse toMyReviewsByScoreCursorResponse(
-            List<ReviewResDto.MyReviewItem> reviews,
-            Float nextCursorScore,
-            Long nextCursorId,
-            boolean hasNext
+            Slice<Review> slice
     ) {
-        return new ReviewResDto.MyReviewsByScoreCursorResponse(reviews, nextCursorScore, nextCursorId, hasNext);
+        List<Review> reviews = slice.getContent();
+        List<ReviewResDto.MyReviewItem> items = reviews.stream()
+                .map(ReviewConverter::toMyReviewItem)
+                .toList();
+
+        Review lastReview = slice.hasNext()
+                ? reviews.get(reviews.size() - 1)
+                : null;
+        Float nextCursorScore = lastReview == null ? null : lastReview.getScore();
+        Long nextCursorId = lastReview == null ? null : lastReview.getId();
+
+        return new ReviewResDto.MyReviewsByScoreCursorResponse(
+                items,
+                nextCursorScore,
+                nextCursorId,
+                slice.hasNext()
+        );
     }
 }

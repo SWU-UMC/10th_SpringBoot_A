@@ -16,14 +16,15 @@ public class SwaggerConfig {
     public OpenAPI swagger() {
         Info info = new Info().title("UMC10th").description("10th Swagger").version("0.0.1");
 
-        String securityScheme = "basicAuth";
+        String securityScheme = "bearerAuth";
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(securityScheme);
 
         Components components = new Components()
                 .addSecuritySchemes(securityScheme, new SecurityScheme()
                         .name(securityScheme)
                         .type(SecurityScheme.Type.HTTP)
-                        .scheme("basic"));
+                        .scheme("bearer")
+                        .bearerFormat("JWT"));
 
         return new OpenAPI()
                 .info(info)

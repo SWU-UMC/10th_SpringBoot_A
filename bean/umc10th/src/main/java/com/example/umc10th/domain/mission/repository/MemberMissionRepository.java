@@ -2,8 +2,8 @@ package com.example.umc10th.domain.mission.repository;
 
 import com.example.umc10th.domain.mission.entity.MemberMission;
 import com.example.umc10th.domain.mission.enums.MemberMissionStatus;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,7 +19,7 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
               and mm.status = :status
             order by mm.id desc
             """)
-    Page<MemberMission> findMemberMissionsByStatus(
+    Slice<MemberMission> findMemberMissionsByStatus(
             @Param("memberId") Long memberId,
             @Param("status") MemberMissionStatus status,
             Pageable pageable
